@@ -1,0 +1,23 @@
+.root {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+}
+
+.root > div {
+  width: 93vw;
+  min-width: 93vw;
+  padding-right: 36px;
+  scroll-snap-align: start;
+}
+.root > div:last-of-type {
+  width: 100vw;
+  min-width: 100vw;
+}
+
+.root.fullWidth > div {
+  width: 100vw;
+  min-width: 100vw;
+  padding-right: 0px;
+}

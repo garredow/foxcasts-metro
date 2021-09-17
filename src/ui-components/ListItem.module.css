@@ -1,0 +1,35 @@
+.root {
+  font-size: 28px;
+  white-space: nowrap;
+  padding: 6px 0 6px 12px;
+  font-weight: 300;
+  /* margin: 12px; */
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.root > img {
+  aspect-ratio: 1/1;
+  margin-right: 12px;
+  width: 50px;
+  height: 50px;
+}
+
+.primaryText {
+  font-size: 24px;
+  font-weight: 300;
+  color: var(--primary-text-color);
+}
+
+.secondaryText {
+  font-size: 18px;
+  font-weight: 300;
+  color: var(--secondary-text-color);
+}
+
+.accentText {
+  font-size: 18px;
+  font-weight: 300;
+  color: var(--accent-text-color);
+}

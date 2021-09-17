@@ -1,0 +1,10 @@
+.root {
+}
+
+.header {
+  font-size: 40px;
+  white-space: nowrap;
+  /* margin: 0 12px 12px 12px; */
+  margin: 12px 0;
+  font-weight: 400;
+}

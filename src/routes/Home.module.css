@@ -1,0 +1,53 @@
+.appHeader {
+  font-size: 120px;
+  font-weight: 300;
+  white-space: nowrap;
+  padding: 0px 24px 0 12px;
+  overflow: hidden;
+}
+
+.panels {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+}
+
+.panel {
+  width: 93vw;
+  min-width: 93vw;
+  padding-right: 36px;
+  scroll-snap-align: start;
+}
+.panel:last-of-type {
+  width: 100vw;
+  min-width: 100vw;
+}
+
+.panelHeader {
+  font-size: 40px;
+  white-space: nowrap;
+  margin: 0 12px 12px 12px;
+  font-weight: 400;
+}
+
+.listItem {
+  font-size: 28px;
+  white-space: nowrap;
+  padding: 6px 12px;
+  font-weight: 300;
+}
+
+.tiles {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 12px;
+  margin: 12px;
+}
+
+.tile {
+  aspect-ratio: 1/1;
+  background-color: var(--app-accent-color);
+  font-size: 20px;
+  padding: 6px 12px;
+}
