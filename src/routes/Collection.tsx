@@ -3,9 +3,11 @@ import { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router';
 import { ComponentBaseProps } from '../models';
 import { Core } from '../services/core';
+import { Button } from '../ui-components/Button';
 import { ListItem } from '../ui-components/ListItem';
 import { Panel } from '../ui-components/Panel';
 import { Screen } from '../ui-components/Screen';
+import { Typography } from '../ui-components/Typography';
 import styles from './Collection.module.css';
 
 type Params = {
@@ -474,9 +476,10 @@ const panels = [
 ];
 
 export function Collection(props: Props) {
-  const history = useHistory();
-  const { initialType } = useParams<Params>();
+  const [seeding, setSeeding] = useState(false);
   const [podcasts, setPodcasts] = useState<Podcast[] | null>(null);
+  const { initialType } = useParams<Params>();
+  const history = useHistory();
 
   useEffect(() => {
     console.log('panel type changed', initialType);
@@ -488,6 +491,30 @@ export function Collection(props: Props) {
 
   function navTo(path: string) {
     history.push(path);
+  }
+
+  async function seedPodcasts() {
+    setSeeding(true);
+    try {
+      // Need to do one at a time so KaiOS can handle it
+      await Core.subscribeByFeedUrl('https://feed.syntax.fm/rss');
+      await Core.subscribeByFeedUrl('https://shoptalkshow.com/feed/podcast');
+      await Core.subscribeByFeedUrl('https://feeds.simplecast.com/JoR28o79'); // React Podcast
+      await Core.subscribeByFeedUrl(
+        'https://feeds.feedwrench.com/js-jabber.rss'
+      );
+      await Core.subscribeByFeedUrl('https://feeds.megaphone.fm/vergecast');
+
+      console.log('seed success');
+    } catch (err) {
+      console.error('Failed to seed data', err);
+    }
+
+    Core.getPodcasts().then((result) => {
+      setPodcasts(result);
+    });
+
+    setSeeding(false);
   }
 
   return (
@@ -513,6 +540,16 @@ export function Collection(props: Props) {
             onClick={() => navTo(`/podcast/${podcast.id}`)}
           />
         ))}
+        {podcasts?.length === 0 ? (
+          <>
+            <Typography>
+              No podcasts to show. Would you like to add some?
+            </Typography>
+            <Button disabled={seeding} onClick={seedPodcasts}>
+              seed podcasts
+            </Button>
+          </>
+        ) : null}
       </Panel>
       <Panel>
         <ListItem primaryText="episodes" />

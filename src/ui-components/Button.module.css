@@ -1,0 +1,26 @@
+.root {
+  background: none;
+  outline: none;
+  font-family: 'Open Sans', Helvetica, sans-serif;
+
+  border: 2px solid var(--primary-text-color);
+  color: var(--primary-text-color);
+  font-weight: 600;
+  font-size: 16px;
+  padding: 6px 12px;
+  margin: 6px 0;
+  text-transform: lowercase;
+}
+
+.root:active {
+  background-color: #fff;
+  color: #000;
+}
+.root:disabled {
+  border: 2px solid var(--secondary-text-color);
+  color: var(--secondary-text-color);
+}
+
+.root.fullWidth {
+  width: 100%;
+}
