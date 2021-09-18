@@ -6,6 +6,7 @@ import { ComponentBaseProps } from '../models';
 import { Core } from '../services/core';
 import { Icon } from '../ui-components/Icon';
 import { ListItem } from '../ui-components/ListItem';
+import { Loading } from '../ui-components/Loading';
 import { Panel } from '../ui-components/Panel';
 import ProgressBar from '../ui-components/ProgressBar';
 import { Screen } from '../ui-components/Screen';
@@ -122,6 +123,7 @@ export function Player(props: Props) {
             />
           );
         })}
+        {chapters === null ? <Loading /> : null}
         {chapters?.length === 0 ? (
           <Typography>This episode does not have chapters.</Typography>
         ) : null}

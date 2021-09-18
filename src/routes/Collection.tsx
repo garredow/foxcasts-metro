@@ -5,6 +5,7 @@ import { ComponentBaseProps } from '../models';
 import { Core } from '../services/core';
 import { Button } from '../ui-components/Button';
 import { ListItem } from '../ui-components/ListItem';
+import { Loading } from '../ui-components/Loading';
 import { Panel } from '../ui-components/Panel';
 import { Screen } from '../ui-components/Screen';
 import { Typography } from '../ui-components/Typography';
@@ -531,6 +532,7 @@ export function Collection(props: Props) {
       }}
     >
       <Panel>
+        {podcasts === null ? <Loading /> : null}
         {podcasts?.map((podcast) => (
           <ListItem
             key={podcast.id}

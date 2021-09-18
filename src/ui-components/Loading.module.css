@@ -1,0 +1,62 @@
+.root {
+  text-align: center;
+}
+
+.dot {
+  display: block;
+  margin: 0 auto;
+}
+
+.dot[class*='dot'] {
+  height: 4px;
+  width: 4px;
+  background: var(--app-accent-color);
+  display: inline-block;
+  margin: 0 2px;
+
+  animation: loader 6s infinite;
+  animation-timing-function: cubic-bezier(0.05, 0.9, 0.9, 0.05);
+  animation-fill-mode: both;
+}
+
+.dot.dot1 {
+  animation-delay: 2s;
+}
+.dot.dot2 {
+  animation-delay: 1.6s;
+}
+.dot.dot3 {
+  animation-delay: 1.2s;
+}
+.dot.dot4 {
+  animation-delay: 0.8s;
+}
+.dot.dot5 {
+  animation-delay: 0.4s;
+}
+.dot.dot6 {
+  animation-delay: 0;
+}
+
+@keyframes loader {
+  0% {
+    transform: translateX(-150px);
+    opacity: 0;
+  }
+  1% {
+    opacity: 1;
+  }
+  25% {
+    opacity: 1;
+  }
+  49% {
+    opacity: 1;
+  }
+  50% {
+    transform: translateX(150px);
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
