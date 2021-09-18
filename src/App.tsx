@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { HashRouter as Router, Route } from 'react-router-dom';
+import { HashRouter as Router, Redirect, Route } from 'react-router-dom';
 import { PlayerProvider } from './contexts/PlayerProvider';
 import { SettingsProvider } from './contexts/SettingsProvider';
 import { Collection } from './routes/Collection';
@@ -32,7 +32,7 @@ export default function App() {
 
   return (
     <Router>
-      <Route path="/collection/:initialType">
+      <Route path="/collection/:panelId">
         <Collection />
       </Route>
       <Route path="/podcast/:podcastId">
@@ -47,8 +47,11 @@ export default function App() {
       <Route path="/player">
         <Player />
       </Route>
-      <Route path="/" exact>
+      <Route path="/home/:panelId">
         <Home />
+      </Route>
+      <Route path="/" exact>
+        <Redirect to="/home/collection" />
       </Route>
     </Router>
   );

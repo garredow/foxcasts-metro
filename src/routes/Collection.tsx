@@ -11,8 +11,9 @@ import { Typography } from '../ui-components/Typography';
 import styles from './Collection.module.css';
 
 type Params = {
-  initialType: string;
+  panelId: string;
 };
+
 type Props = ComponentBaseProps & {
   headerText?: string;
 };
@@ -478,16 +479,15 @@ const panels = [
 export function Collection(props: Props) {
   const [seeding, setSeeding] = useState(false);
   const [podcasts, setPodcasts] = useState<Podcast[] | null>(null);
-  const { initialType } = useParams<Params>();
+  const { panelId } = useParams<Params>();
   const history = useHistory();
 
   useEffect(() => {
-    console.log('panel type changed', initialType);
-    if (initialType === 'podcasts' && podcasts === null) {
+    if (panelId === 'podcasts' && podcasts === null) {
       Core.getPodcasts().then(setPodcasts);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [initialType]);
+  }, [panelId]);
 
   function navTo(path: string) {
     history.push(path);
@@ -522,7 +522,7 @@ export function Collection(props: Props) {
       className={styles.root}
       title="Collection"
       tabs={panels}
-      initialPanelIndex={panels.findIndex((a) => a.id === initialType)}
+      initialPanelIndex={panels.findIndex((a) => a.id === panelId)}
       onPanelChanged={(index) => {
         if (index === -1) {
           return;

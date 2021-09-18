@@ -33,9 +33,6 @@ export function Player(props: Props) {
 
   const { episode, ...player } = usePlayer();
 
-  console.log('podcast', podcast);
-  console.log('episode', episode);
-
   useEffect(() => {
     if (!episode) {
       setPodcast(null);
@@ -145,7 +142,7 @@ export function Player(props: Props) {
         </Typography>
         <Typography type="title">About the author</Typography>
         <Typography type="bodyLarge">{podcast?.title}</Typography>
-        <Typography type="bodyLarge">{podcast?.description}</Typography>
+        <Typography>{podcast?.description}</Typography>
       </Panel>
     </Screen>
   );

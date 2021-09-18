@@ -1,4 +1,4 @@
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { formatTime } from 'foxcasts-core/lib/utils';
 import { Podcast } from 'foxcasts-core/lib/types';
 import { PlaybackStatus, usePlayer } from '../contexts/PlayerProvider';
@@ -12,7 +12,18 @@ import { useEffect, useState } from 'react';
 import { Icon } from '../ui-components/Icon';
 import { Core } from '../services/core';
 
+type Params = {
+  panelId: string;
+};
+
 interface Props {}
+
+const panels = [
+  { id: 'player', label: 'player' },
+  { id: 'collection', label: 'collection' },
+  { id: 'browse', label: 'browse' },
+  { id: 'system', label: 'system' },
+];
 
 export default function Home(props: Props) {
   const [podcast, setPodcast] = useState<Podcast | null>(null);
@@ -23,6 +34,7 @@ export default function Home(props: Props) {
   });
 
   const history = useHistory();
+  const { panelId } = useParams<Params>();
   const player = usePlayer();
 
   useEffect(() => {
@@ -75,6 +87,17 @@ export default function Home(props: Props) {
       heroText="foxcasts metro"
       panelPeek={true}
       backgroundImageUrl={podcast?.artworkUrl}
+      initialPanelIndex={(() => {
+        let index = panels.findIndex((a) => a.id === panelId);
+        if (!player.episode) index--;
+        return index;
+      })()}
+      onPanelChanged={(index) => {
+        if (index === -1) {
+          return;
+        }
+        history.replace(`/home/${panels[index].id}`);
+      }}
     >
       {player.episode ? (
         <Panel headerText="now playing">
