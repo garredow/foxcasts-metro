@@ -1,12 +1,38 @@
 .root {
+  background-size: cover;
+  background-blend-mode: darken;
+  background-color: rgba(0, 0, 0, 0.7);
+  background-repeat: no-repeat;
+}
+
+.content {
+  height: 100vh;
   display: flex;
   flex-direction: column;
+  display: flex;
+  flex-direction: column;
+  backdrop-filter: blur(10px);
+}
+
+.heroText {
+  font-size: 120px;
+  font-weight: 300;
+  white-space: nowrap;
+  padding: 0px 24px 0 12px;
+  overflow: hidden;
+}
+
+.title {
+  padding: 12px 12px 0 12px;
+  font-size: 16px;
+  text-transform: uppercase;
 }
 
 .tabs {
   display: flex;
   overflow-x: auto;
-  padding: 6px 0;
+  padding: 6px 0 12px 0;
+  white-space: nowrap;
 }
 
 .tabs > div {
@@ -31,11 +57,14 @@
   width: 93vw;
   min-width: 93vw;
   padding-right: 36px;
+  padding-left: 12px;
   scroll-snap-align: start;
+  overflow-y: auto;
 }
 .panels > div:last-of-type {
   width: 100vw;
   min-width: 100vw;
+  padding-right: 0;
 }
 
 .panels.fullWidth > div {

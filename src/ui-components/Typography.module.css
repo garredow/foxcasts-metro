@@ -1,0 +1,36 @@
+.root {
+  padding: 6px 0;
+}
+
+.caption {
+  font-size: 12px;
+  font-weight: 400;
+}
+.body {
+  font-size: 14px;
+  font-weight: 400;
+}
+.bodyStrong {
+  font-size: 14px;
+  font-weight: 500;
+}
+.bodyLarge {
+  font-size: 18px;
+  font-weight: 400;
+}
+.subtitle {
+  font-size: 20px;
+  font-weight: 500;
+}
+.title {
+  font-size: 28px;
+  font-weight: 500;
+}
+.titleLarge {
+  font-size: 40px;
+  font-weight: 500;
+}
+.display {
+  font-size: 68px;
+  font-weight: 500;
+}

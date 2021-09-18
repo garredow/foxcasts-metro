@@ -1,7 +1,7 @@
 .root {
   font-size: 28px;
   white-space: nowrap;
-  padding: 6px 0 6px 12px;
+  padding: 6px 0 6px 0;
   font-weight: 300;
   /* margin: 12px; */
   display: flex;
