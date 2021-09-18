@@ -12,11 +12,23 @@ type Props = ComponentBaseProps & {
     | 'title'
     | 'titleLarge'
     | 'display';
+  color?: 'primary' | 'secondary' | 'accent';
 };
 
-export function Typography({ type = 'body', ...props }: Props) {
+export function Typography({
+  type = 'body',
+  color = 'primary',
+  ...props
+}: Props) {
   return (
-    <div className={joinClasses(styles.root, styles[type], props.className)}>
+    <div
+      className={joinClasses(
+        styles.root,
+        styles[type],
+        styles[color],
+        props.className
+      )}
+    >
       {props.children}
     </div>
   );

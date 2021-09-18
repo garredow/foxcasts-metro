@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { HashRouter as Router, Route } from 'react-router-dom';
 import { PlayerProvider } from './contexts/PlayerProvider';
 import { SettingsProvider } from './contexts/SettingsProvider';
 import { Collection } from './routes/Collection';
+import { EpisodeDetail } from './routes/EpisodeDetail';
 import Home from './routes/Home';
 import { Playlists } from './routes/Playlists';
 import { PodcastDetail } from './routes/Podcast';
@@ -35,6 +36,9 @@ export default function App() {
       </Route>
       <Route path="/podcast/:podcastId">
         <PodcastDetail />
+      </Route>
+      <Route path="/episode/:episodeId">
+        <EpisodeDetail />
       </Route>
       <Route path="/playlist/:playlist">
         <Playlists />

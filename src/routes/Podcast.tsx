@@ -69,6 +69,7 @@ export function PodcastDetail(props: Props) {
           <ListItem
             primaryText={episodes[0].title}
             secondaryText={new Date(episodes[0].date).toLocaleDateString()}
+            onClick={() => navTo(`/episode/${episodes[0].id}`)}
           />
         ) : null}
         <div className={styles.divider}></div>
@@ -83,6 +84,7 @@ export function PodcastDetail(props: Props) {
             key={episode.id}
             primaryText={episode.title}
             secondaryText={new Date(episode.date).toLocaleDateString()}
+            onClick={() => navTo(`/episode/${episode.id}`)}
           />
         ))}
       </Panel>
