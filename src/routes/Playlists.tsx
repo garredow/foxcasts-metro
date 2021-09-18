@@ -63,6 +63,7 @@ export function Playlists(props: Props) {
             key={episode.id}
             primaryText={episode.title}
             secondaryText={episode.podcastTitle}
+            onClick={() => navTo(`/episode/${episode.id}`)}
           />
         ))}
         {recent?.length === 0 ? <p>No episodes</p> : null}
@@ -73,6 +74,7 @@ export function Playlists(props: Props) {
             key={episode.id}
             primaryText={episode.title}
             secondaryText={episode.podcastTitle}
+            onClick={() => navTo(`/episode/${episode.id}`)}
           />
         ))}
         {inProgress?.length === 0 ? <p>No episodes</p> : null}
@@ -83,6 +85,7 @@ export function Playlists(props: Props) {
             key={episode.id}
             primaryText={episode.title}
             secondaryText={episode.podcastTitle}
+            onClick={() => navTo(`/episode/${episode.id}`)}
           />
         ))}
         {favorites?.length === 0 ? <p>No episodes</p> : null}

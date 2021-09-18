@@ -59,7 +59,7 @@ export function Screen({ panelPeek = false, ...props }: Props) {
 
     const background = backgroundRef?.current as unknown as HTMLDivElement;
     if (background && panels) {
-      const diff = background.scrollWidth - background.clientWidth;
+      // const diff = background.scrollWidth - background.clientWidth;
       // const newLeft = (progress / 100) * diff;
       background.style.backgroundPositionX = `${progress * -2}px`;
     }
