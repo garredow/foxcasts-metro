@@ -4,7 +4,8 @@ import { PlayerProvider } from './contexts/PlayerProvider';
 import { SettingsProvider } from './contexts/SettingsProvider';
 import { Collection } from './routes/Collection';
 import Home from './routes/Home';
-// import { themes } from '../themes';
+import { Playlists } from './routes/Playlists';
+import { PodcastDetail } from './routes/Podcast';
 // import { Core } from './services/core';
 
 export function AppWrapper() {
@@ -31,6 +32,12 @@ export default function App() {
     <Router>
       <Route path="/collection/:initialType">
         <Collection />
+      </Route>
+      <Route path="/podcast/:podcastId">
+        <PodcastDetail />
+      </Route>
+      <Route path="/playlist/:playlist">
+        <Playlists />
       </Route>
       <Route path="/" exact>
         <Home />
