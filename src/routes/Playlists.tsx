@@ -63,6 +63,7 @@ export function Playlists(props: Props) {
             key={episode.id}
             primaryText={episode.title}
             secondaryText={episode.podcastTitle}
+            accentText={new Date(episode.date).toLocaleDateString()}
             onClick={() => navTo(`/episode/${episode.id}`)}
           />
         ))}

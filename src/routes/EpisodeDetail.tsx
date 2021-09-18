@@ -1,4 +1,5 @@
 import { EpisodeExtended, Podcast } from 'foxcasts-core/lib/types';
+import { formatFileSize, formatTime } from 'foxcasts-core/lib/utils';
 import { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router';
 import { usePlayer } from '../contexts/PlayerProvider';
@@ -31,20 +32,13 @@ export function EpisodeDetail(props: Props) {
   const player = usePlayer();
 
   useEffect(() => {
-    console.log('panel type changed', episodeId);
     Core.getEpisodeById(parseInt(episodeId, 10))
       .then((res) => {
         setEpisode(res);
         return Core.getPodcastById(res.podcastId);
       })
       .then(setPodcast);
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  // console.log(episode);
-
-  // console.log(podcast);
+  }, [episodeId]);
 
   function handleAction(action: string) {
     if (!episode) return;
@@ -74,11 +68,21 @@ export function EpisodeDetail(props: Props) {
       }}
     >
       <Panel paddingRight={true}>
-        <Typography type="subtitle" color="accent">
-          {new Date(episode?.date || '').toLocaleDateString()}
-        </Typography>
         <Typography type="title">{episode?.title}</Typography>
+        <Typography type="subtitle">Description</Typography>
         <Typography type="body">{episode?.description}</Typography>
+        <Typography type="subtitle">Published Date</Typography>
+        <Typography color="accent" type="bodyLarge">
+          {new Date(episode?.date || '').toLocaleString()}
+        </Typography>
+        <Typography type="subtitle">Duration</Typography>
+        <Typography color="accent" type="bodyLarge">
+          {formatTime(episode?.duration || 0)}
+        </Typography>
+        <Typography type="subtitle">File Size</Typography>
+        <Typography color="accent" type="bodyLarge">
+          {formatFileSize(episode?.fileSize || 0)}
+        </Typography>
       </Panel>
       <Panel>
         <ListItem primaryText="Play" onClick={() => handleAction('play')} />
