@@ -37,7 +37,7 @@ body {
   --menubar-bg-color: #000;
   --menubar-text-color: rgba(255, 255, 255, 0.88);
 
-  --input-border-color: #aaa;
+  --input-border-color: #777;
 }
 
 * {

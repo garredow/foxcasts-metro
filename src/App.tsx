@@ -5,6 +5,7 @@ import { SettingsProvider } from './contexts/SettingsProvider';
 import { Collection } from './routes/Collection';
 import { EpisodeDetail } from './routes/EpisodeDetail';
 import Home from './routes/Home';
+import { Player } from './routes/Player';
 import { Playlists } from './routes/Playlists';
 import { PodcastDetail } from './routes/Podcast';
 // import { Core } from './services/core';
@@ -42,6 +43,9 @@ export default function App() {
       </Route>
       <Route path="/playlist/:playlist">
         <Playlists />
+      </Route>
+      <Route path="/player">
+        <Player />
       </Route>
       <Route path="/" exact>
         <Home />

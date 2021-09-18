@@ -48,22 +48,24 @@ export default function Home(props: Props) {
   }, [player.episode]);
 
   function handleNavigate(screen: string) {
-    // if (screen === 'player') {
-    //   player.load(101, false);
+    // if (screen === 'categories') {
+    //   player.load(26, false);
     //   return;
     // }
     switch (screen) {
+      case 'player':
+        history.push(`/player`);
+        break;
       case 'podcasts':
       case 'episodes':
       case 'playlists':
       case 'categories':
-      case 'player':
-        history.push(`collection/${screen}`);
+        history.push(`/collection/${screen}`);
         break;
       case 'settings':
       case 'theme':
       case 'about':
-        history.push(`system/${screen}`);
+        history.push(`/system/${screen}`);
         break;
     }
   }
@@ -123,7 +125,7 @@ export default function Home(props: Props) {
         />
       </Panel>
       <Panel headerText="get podcasts">
-        <div className={styles.listItem}>podcast index</div>
+        <Typography type="subtitle">Podcast Index</Typography>
         <div className={styles.tiles}>
           <div className={styles.tile}>Trending podcasts</div>
           <div className={styles.tile}>Browse by category</div>

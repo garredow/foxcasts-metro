@@ -31,18 +31,11 @@
   font-weight: 400;
 }
 
-.listItem {
-  font-size: 28px;
-  white-space: nowrap;
-  padding: 6px 12px;
-  font-weight: 300;
-}
-
 .tiles {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-gap: 12px;
-  margin: 12px;
+  margin-top: 12px;
 }
 
 .tile {
