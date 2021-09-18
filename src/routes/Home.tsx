@@ -1,17 +1,57 @@
 import { useHistory } from 'react-router-dom';
+import { formatTime } from 'foxcasts-core/lib/utils';
+import { Podcast } from 'foxcasts-core/lib/types';
+import { PlaybackStatus, usePlayer } from '../contexts/PlayerProvider';
 import { ListItem } from '../ui-components/ListItem';
 import { Panel } from '../ui-components/Panel';
+import ProgressBar from '../ui-components/ProgressBar';
 import { Screen } from '../ui-components/Screen';
+import { Typography } from '../ui-components/Typography';
 import styles from './Home.module.css';
+import { useEffect, useState } from 'react';
+import { Icon } from '../ui-components/Icon';
+import { Core } from '../services/core';
 
 interface Props {}
 
 export default function Home(props: Props) {
+  const [podcast, setPodcast] = useState<Podcast | null>(null);
+  const [status, setStatus] = useState<PlaybackStatus>({
+    playing: false,
+    currentTime: 0,
+    duration: 0,
+  });
+
   const history = useHistory();
+  const player = usePlayer();
+
+  useEffect(() => {
+    if (!player.episode) {
+      setPodcast(null);
+      return;
+    }
+
+    if (podcast?.id !== player.episode.podcastId) {
+      Core.getPodcastById(player.episode.podcastId).then(setPodcast);
+    }
+
+    const status = player.getStatus();
+    setStatus(status);
+
+    const timer = setInterval(() => {
+      const status = player.getStatus();
+      setStatus(status);
+    }, 1000);
+
+    return (): void => clearInterval(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [player.episode]);
 
   function handleNavigate(screen: string) {
-    console.log('nav to', screen);
-
+    // if (screen === 'player') {
+    //   player.load(101, false);
+    //   return;
+    // }
     switch (screen) {
       case 'podcasts':
       case 'episodes':
@@ -29,7 +69,37 @@ export default function Home(props: Props) {
   }
 
   return (
-    <Screen heroText="foxcasts metro">
+    <Screen
+      heroText="foxcasts metro"
+      panelPeek={true}
+      backgroundImageUrl={podcast?.artworkUrl}
+    >
+      {player.episode ? (
+        <Panel headerText="now playing">
+          <img src={player.episode.cover} alt="" />
+          <Typography type="subtitle">{player.episode.title}</Typography>
+          <Typography type="bodyLarge" color="accent">
+            {player.episode.podcastTitle}
+          </Typography>
+          <ProgressBar
+            className={styles.progressBar}
+            position={(status.currentTime / status.duration) * 100 || 0}
+          />
+          <div className={styles.playerTimes}>
+            <div>{formatTime(status.currentTime)}</div>
+            <div>-{formatTime(status.duration - status.currentTime || 0)}</div>
+          </div>
+          <div className={styles.playbackControls}>
+            <Icon icon="rewind" onClick={() => player.jump(-30)} />
+            {status.playing ? (
+              <Icon icon="pause" onClick={() => player.pause()} />
+            ) : (
+              <Icon icon="play" onClick={() => player.play()} />
+            )}
+            <Icon icon="ff" onClick={() => player.jump(30)} />
+          </div>
+        </Panel>
+      ) : null}
       <Panel headerText="collection">
         <ListItem
           primaryText="podcasts"

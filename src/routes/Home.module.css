@@ -51,3 +51,16 @@
   font-size: 20px;
   padding: 6px 12px;
 }
+
+.progressBar,
+.playerTimes,
+.playbackControls {
+  width: 80%;
+}
+
+.playerTimes,
+.playbackControls {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
