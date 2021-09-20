@@ -12,7 +12,7 @@
 }
 
 .page-forward-enter {
-  transform: rotateY(110deg) skewY(10deg);
+  transform: rotateY(150deg) skewY(10deg);
 }
 
 .page-forward-enter-active {
@@ -36,7 +36,6 @@
 
 .page-back-enter-active {
   opacity: 1;
-
   transition: opacity 100ms;
   transition-delay: 500ms;
 }
@@ -46,6 +45,6 @@
 }
 
 .page-back-exit-active {
-  transform: rotateY(110deg) skewY(10deg);
+  transform: rotateY(150deg) skewY(10deg);
   transition: transform 500ms;
 }
