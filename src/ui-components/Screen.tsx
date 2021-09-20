@@ -30,7 +30,6 @@ export function Screen({ panelPeek = false, ...props }: Props) {
   useEffect(() => {
     const panels = panelsRef.current as unknown as HTMLDivElement;
     if (panels && props.initialPanelIndex !== undefined) {
-      console.dir(panels);
       panels.scrollLeft = panels.clientWidth * props.initialPanelIndex;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

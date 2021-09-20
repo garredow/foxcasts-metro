@@ -11,6 +11,7 @@ import styles from './Podcast.module.css';
 
 type Params = {
   podcastId: string;
+  panelId: string;
 };
 type Props = ComponentBaseProps & {
   headerText?: string;
@@ -23,7 +24,7 @@ const panels = [
 
 export function PodcastDetail(props: Props) {
   const history = useHistory();
-  const { podcastId } = useParams<Params>();
+  const { podcastId, panelId } = useParams<Params>();
   const [podcast, setPodcast] = useState<Podcast>();
   const [episodes, setEpisodes] = useState<Episode[]>([]);
 
@@ -48,6 +49,7 @@ export function PodcastDetail(props: Props) {
       title={podcast?.title || 'podcast'}
       backgroundImageUrl={podcast?.artworkUrl}
       tabs={panels}
+      initialPanelIndex={panels.findIndex((a) => a.id === panelId)}
       panelPeek={false}
       onPanelChanged={(index) => {
         if (index === -1) {

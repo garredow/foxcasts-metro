@@ -1,5 +1,10 @@
 import { useEffect } from 'react';
-import { HashRouter as Router, Redirect, Route } from 'react-router-dom';
+import {
+  HashRouter as Router,
+  Redirect,
+  Route,
+  Switch,
+} from 'react-router-dom';
 import { PlayerProvider } from './contexts/PlayerProvider';
 import { SettingsProvider } from './contexts/SettingsProvider';
 import { Collection } from './routes/Collection';
@@ -32,27 +37,35 @@ export default function App() {
 
   return (
     <Router>
-      <Route path="/collection/:panelId">
-        <Collection />
-      </Route>
-      <Route path="/podcast/:podcastId">
-        <PodcastDetail />
-      </Route>
-      <Route path="/episode/:episodeId">
-        <EpisodeDetail />
-      </Route>
-      <Route path="/playlist/:playlist">
-        <Playlists />
-      </Route>
-      <Route path="/player">
-        <Player />
-      </Route>
-      <Route path="/home/:panelId">
-        <Home />
-      </Route>
-      <Route path="/" exact>
-        <Redirect to="/home/collection" />
-      </Route>
+      <Switch>
+        <Route path="/home/:panelId">
+          <Home />
+        </Route>
+        <Redirect exact from="/" to="/home/collection" />
+
+        <Route path="/collection/:panelId">
+          <Collection />
+        </Route>
+        <Redirect from="/collection" to="/collection/podcasts" />
+
+        <Route path="/podcast/:podcastId/:panelId">
+          <PodcastDetail />
+        </Route>
+        <Redirect from="/podcast/:podcastId" to="/podcast/:podcastId/info" />
+
+        <Route path="/episode/:episodeId/:panelId">
+          <EpisodeDetail />
+        </Route>
+        <Redirect from="/episode/:episodeId" to="/episode/:episodeId/info" />
+
+        <Route path="/playlist/:playlist">
+          <Playlists />
+        </Route>
+
+        <Route path="/player">
+          <Player />
+        </Route>
+      </Switch>
     </Router>
   );
 }

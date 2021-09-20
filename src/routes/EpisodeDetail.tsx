@@ -13,6 +13,7 @@ import styles from './EpisodeDetail.module.css';
 
 type Params = {
   episodeId: string;
+  panelId: string;
 };
 type Props = ComponentBaseProps & {
   headerText?: string;
@@ -25,7 +26,7 @@ const panels = [
 
 export function EpisodeDetail(props: Props) {
   const history = useHistory();
-  const { episodeId } = useParams<Params>();
+  const { episodeId, panelId } = useParams<Params>();
   const [podcast, setPodcast] = useState<Podcast>();
   const [episode, setEpisode] = useState<EpisodeExtended>();
 
@@ -59,6 +60,7 @@ export function EpisodeDetail(props: Props) {
       title={podcast?.title || 'podcast'}
       backgroundImageUrl={podcast?.artworkUrl}
       tabs={panels}
+      initialPanelIndex={panels.findIndex((a) => a.id === panelId)}
       panelPeek={false}
       onPanelChanged={(index) => {
         if (index === -1) {
