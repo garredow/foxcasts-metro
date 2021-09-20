@@ -67,7 +67,7 @@ export function Screen({ panelPeek = false, ...props }: Props) {
     if (heroText && panels && heroText.scrollWidth > heroText.clientWidth) {
       const headerDiff = heroText.scrollWidth - heroText.clientWidth;
       const newLeft = (progress / 100) * headerDiff;
-      heroText.scrollLeft = newLeft;
+      heroText.style.transform = `translateX(-${newLeft}px)`;
     }
 
     // TODO: Scroll tabs
