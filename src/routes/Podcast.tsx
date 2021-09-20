@@ -29,15 +29,12 @@ export function PodcastDetail(props: Props) {
   const [episodes, setEpisodes] = useState<Episode[]>([]);
 
   useEffect(() => {
-    console.log('panel type changed', podcastId, typeof podcastId);
     const podId = parseInt(podcastId, 10);
     Core.getPodcastById(podId).then(setPodcast);
     Core.getEpisodesByPodcastId(podId).then(setEpisodes);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  // console.log(podcast);
 
   function navTo(path: string) {
     history.push(path);
@@ -71,7 +68,7 @@ export function PodcastDetail(props: Props) {
           <ListItem
             primaryText={episodes[0].title}
             secondaryText={new Date(episodes[0].date).toLocaleDateString()}
-            onClick={() => navTo(`/episode/${episodes[0].id}`)}
+            onClick={() => navTo(`/episode/${episodes[0].id}/info`)}
           />
         ) : null}
         <div className={styles.divider}></div>
@@ -86,7 +83,7 @@ export function PodcastDetail(props: Props) {
             key={episode.id}
             primaryText={episode.title}
             secondaryText={new Date(episode.date).toLocaleDateString()}
-            onClick={() => navTo(`/episode/${episode.id}`)}
+            onClick={() => navTo(`/episode/${episode.id}/info`)}
           />
         ))}
       </Panel>

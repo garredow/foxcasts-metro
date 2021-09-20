@@ -1,38 +1,51 @@
-.App {
-  text-align: center;
+.container {
+  position: relative;
+  perspective: 1000px;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.page {
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  transform-origin: left;
+  transform-style: preserve-3d;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.page-forward-enter {
+  transform: rotateY(110deg) skewY(10deg);
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.page-forward-enter-active {
+  transform: rotateY(0deg) skewY(0deg);
+  transition: transform 500ms;
+  transition-delay: 500ms;
 }
 
-.App-link {
-  color: #61dafb;
+.page-forward-exit {
+  transform: rotateY(0deg) skewY(0deg);
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.page-forward-exit-active {
+  transform: rotateY(-90deg) skewY(-10deg);
+  transition: transform 500ms;
+}
+
+.page-back-enter {
+  opacity: 0;
+}
+
+.page-back-enter-active {
+  opacity: 1;
+
+  transition: opacity 100ms;
+  transition-delay: 500ms;
+}
+
+.page-back-exit {
+  transform: rotateY(0deg) skewY(0deg);
+}
+
+.page-back-exit-active {
+  transform: rotateY(110deg) skewY(10deg);
+  transition: transform 500ms;
 }

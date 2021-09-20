@@ -539,7 +539,7 @@ export function Collection(props: Props) {
             primaryText={podcast.title}
             secondaryText={podcast.author}
             imageUrl={podcast.artwork}
-            onClick={() => navTo(`/podcast/${podcast.id}`)}
+            onClick={() => navTo(`/podcast/${podcast.id}/info`)}
           />
         ))}
         {podcasts?.length === 0 ? (

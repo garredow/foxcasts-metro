@@ -1,10 +1,6 @@
-import { useEffect } from 'react';
-import {
-  HashRouter as Router,
-  Redirect,
-  Route,
-  Switch,
-} from 'react-router-dom';
+import { useEffect, useRef } from 'react';
+import { HashRouter as Router, Redirect, Route } from 'react-router-dom';
+import { CSSTransition } from 'react-transition-group';
 import { PlayerProvider } from './contexts/PlayerProvider';
 import { SettingsProvider } from './contexts/SettingsProvider';
 import { Collection } from './routes/Collection';
@@ -14,6 +10,7 @@ import { Player } from './routes/Player';
 import { Playlists } from './routes/Playlists';
 import { PodcastDetail } from './routes/Podcast';
 // import { Core } from './services/core';
+import './App.css';
 
 export function AppWrapper() {
   return (
@@ -27,6 +24,28 @@ export function AppWrapper() {
   );
 }
 
+function AnimatedRoute({ component: Component, ...rest }: any): JSX.Element {
+  const nodeRef = useRef(null);
+
+  return (
+    <Route {...rest}>
+      {({ match, history }) => (
+        <CSSTransition
+          nodeRef={nodeRef}
+          in={match != null}
+          timeout={1000}
+          classNames={history.action === 'PUSH' ? 'page-forward' : 'page-back'}
+          unmountOnExit
+        >
+          <div ref={nodeRef} className="page">
+            <Component />
+          </div>
+        </CSSTransition>
+      )}
+    </Route>
+  );
+}
+
 export default function App() {
   // const { settings } = useSettings();
 
@@ -36,36 +55,24 @@ export default function App() {
   }, []);
 
   return (
-    <Router>
-      <Switch>
-        <Route path="/home/:panelId">
-          <Home />
+    <div className="container">
+      <Router>
+        <AnimatedRoute path="/home/:panelId" component={Home} />
+        <AnimatedRoute path="/collection/:panelId" component={Collection} />
+        <AnimatedRoute
+          path="/podcast/:podcastId/:panelId"
+          component={PodcastDetail}
+        />
+        <AnimatedRoute
+          path="/episode/:episodeId/:panelId"
+          component={EpisodeDetail}
+        />
+        <AnimatedRoute path="/playlist/:playlist" component={Playlists} />
+        <AnimatedRoute path="/player" component={Player} />
+        <Route path="/" exact>
+          <Redirect to="/home/collection" />
         </Route>
-        <Redirect exact from="/" to="/home/collection" />
-
-        <Route path="/collection/:panelId">
-          <Collection />
-        </Route>
-        <Redirect from="/collection" to="/collection/podcasts" />
-
-        <Route path="/podcast/:podcastId/:panelId">
-          <PodcastDetail />
-        </Route>
-        <Redirect from="/podcast/:podcastId" to="/podcast/:podcastId/info" />
-
-        <Route path="/episode/:episodeId/:panelId">
-          <EpisodeDetail />
-        </Route>
-        <Redirect from="/episode/:episodeId" to="/episode/:episodeId/info" />
-
-        <Route path="/playlist/:playlist">
-          <Playlists />
-        </Route>
-
-        <Route path="/player">
-          <Player />
-        </Route>
-      </Switch>
-    </Router>
+      </Router>
+    </div>
   );
 }

@@ -33,12 +33,14 @@ export function EpisodeDetail(props: Props) {
   const player = usePlayer();
 
   useEffect(() => {
-    Core.getEpisodeById(parseInt(episodeId, 10))
-      .then((res) => {
-        setEpisode(res);
-        return Core.getPodcastById(res.podcastId);
-      })
-      .then(setPodcast);
+    if (episodeId) {
+      Core.getEpisodeById(parseInt(episodeId, 10))
+        .then((res) => {
+          setEpisode(res);
+          return Core.getPodcastById(res.podcastId);
+        })
+        .then(setPodcast);
+    }
   }, [episodeId]);
 
   function handleAction(action: string) {

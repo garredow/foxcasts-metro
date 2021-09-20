@@ -29,7 +29,6 @@ export function Playlists(props: Props) {
   const [favorites, setFavorites] = useState<EpisodeExtended[] | null>(null);
 
   useEffect(() => {
-    console.log('panel type changed', playlist);
     if (playlist === 'recent' && recent === null) {
       Core.getEpisodesByFilter('recent').then(setRecent);
     } else if (playlist === 'inProgress' && inProgress === null) {
@@ -64,7 +63,7 @@ export function Playlists(props: Props) {
             primaryText={episode.title}
             secondaryText={episode.podcastTitle}
             accentText={new Date(episode.date).toLocaleDateString()}
-            onClick={() => navTo(`/episode/${episode.id}`)}
+            onClick={() => navTo(`/episode/${episode.id}/info`)}
           />
         ))}
         {recent?.length === 0 ? <p>No episodes</p> : null}
