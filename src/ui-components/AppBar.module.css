@@ -1,0 +1,31 @@
+.root {
+  position: absolute;
+  width: 100%;
+  top: 100%;
+  left: 0;
+  transform: translateY(-48px);
+  background-color: #181818;
+  transition: transform 300ms;
+}
+.root.open {
+  transform: translateY(-100%);
+}
+
+.buttons {
+  padding: 6px;
+  display: flex;
+  justify-content: center;
+}
+
+.buttons > .button {
+  margin: 0 6px;
+}
+
+.placeholder {
+  height: 36px;
+  width: 36px;
+}
+
+.flex {
+  flex: 1;
+}

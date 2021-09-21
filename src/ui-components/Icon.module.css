@@ -1,17 +1,34 @@
 .root {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.root.small {
+  width: 36px;
+}
+.root.medium {
+  width: 48px;
+}
+.root.large {
+  width: 76px;
 }
 
-.small {
+.icon-small {
   height: 24px;
   width: 24px;
 }
 
-.medium {
+.icon-medium {
   height: 36px;
   width: 36px;
 }
 
-.large {
+.icon-large {
   height: 64px;
   width: 64px;
+}
+
+.label {
+  font-size: 12px;
+  margin-top: 6px;
 }
