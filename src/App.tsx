@@ -11,6 +11,8 @@ import { Playlists } from './routes/Playlists';
 import { PodcastDetail } from './routes/Podcast';
 // import { Core } from './services/core';
 import './App.css';
+import { Search } from './routes/Search';
+import { PodcastPreview } from './routes/PodcastPreview';
 
 export function AppWrapper() {
   return (
@@ -60,6 +62,11 @@ export default function App() {
         <AnimatedRoute path="/home/:panelId" component={Home} />
         <AnimatedRoute path="/collection/:panelId" component={Collection} />
         <AnimatedRoute
+          path="/podcast/preview/:podexId/:panelId"
+          component={PodcastPreview}
+        />
+        <AnimatedRoute
+          exact
           path="/podcast/:podcastId/:panelId"
           component={PodcastDetail}
         />
@@ -69,6 +76,7 @@ export default function App() {
         />
         <AnimatedRoute path="/playlist/:playlist" component={Playlists} />
         <AnimatedRoute path="/player/:panelId" component={Player} />
+        <AnimatedRoute path="/search/:panelId" component={Search} />
         <Route path="/" exact>
           <Redirect to="/home/collection" />
         </Route>

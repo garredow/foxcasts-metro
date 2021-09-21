@@ -74,6 +74,9 @@ export default function Home(props: Props) {
       case 'categories':
         history.push(`/collection/${screen}`);
         break;
+      case 'search':
+        history.push(`/search/search`);
+        break;
       case 'settings':
       case 'theme':
       case 'about':
@@ -151,7 +154,9 @@ export default function Home(props: Props) {
         <div className={styles.tiles}>
           <div className={styles.tile}>Trending podcasts</div>
           <div className={styles.tile}>Browse by category</div>
-          <div className={styles.tile}>Search</div>
+          <div className={styles.tile} onClick={() => handleNavigate('search')}>
+            Search
+          </div>
         </div>
       </Panel>
       <Panel headerText="system">

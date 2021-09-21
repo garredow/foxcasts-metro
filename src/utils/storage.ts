@@ -1,5 +1,6 @@
 export enum StorageKey {
   Settings = 'settings',
+  RecentSearches = 'recentSearches',
 }
 
 export function getStorageItem<T>(key: StorageKey): T {

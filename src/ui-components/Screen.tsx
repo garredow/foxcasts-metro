@@ -29,13 +29,16 @@ export function Screen({ panelPeek = false, ...props }: Props) {
 
   useEffect(() => {
     const panels = panelsRef.current as unknown as HTMLDivElement;
-    const panelIndex =
-      props.tabs?.findIndex((a) => a.id === props.activePanel) || -1;
+    let panelIndex = props.tabs?.findIndex((a) => a.id === props.activePanel);
+    if (panelIndex === undefined || panelIndex === null) {
+      panelIndex = -1;
+    }
+
     if (panels && props.activePanel && panelIndex >= 0) {
       panels.scrollLeft = panels.clientWidth * panelIndex;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [props.activePanel]);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const scrollingDone = useCallback<any>(
