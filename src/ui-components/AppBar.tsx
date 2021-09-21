@@ -45,7 +45,11 @@ export function AppBar({ ...props }: Props) {
       {props.listItems ? (
         <div className={styles.list}>
           {props.listItems.map((item) => (
-            <ListItem key={item.id} primaryText={item.label} />
+            <ListItem
+              key={item.id}
+              primaryText={item.label}
+              onClick={() => props.onAction?.(item.id)}
+            />
           ))}
         </div>
       ) : null}

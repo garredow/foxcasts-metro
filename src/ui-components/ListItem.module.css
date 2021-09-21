@@ -3,10 +3,13 @@
   white-space: nowrap;
   padding: 6px 0 6px 0;
   font-weight: 300;
-  /* margin: 12px; */
   display: flex;
   align-items: center;
   overflow: hidden;
+  transition: transform 100ms;
+}
+.root:active {
+  transform: rotateY(-10deg) skewY(-1deg);
 }
 
 .root > img {

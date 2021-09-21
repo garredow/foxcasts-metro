@@ -5,7 +5,7 @@
   left: 0;
   transform: translateY(-48px);
   background-color: rgba(24, 24, 24, 1);
-  transition: transform 300ms;
+  transition: transform 200ms;
 }
 .root.open {
   transform: translateY(-100%);
