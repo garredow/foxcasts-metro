@@ -1,0 +1,27 @@
+.root {
+  background: none;
+  outline: none;
+  font-family: 'Open Sans', Helvetica, sans-serif;
+
+  background-color: #b0b0b0;
+  border: 2px solid #b0b0b0;
+  color: #000;
+  font-weight: 600;
+  font-size: 16px;
+  padding: 6px;
+  margin: 6px 0;
+}
+
+.root:focus {
+  background-color: #fff;
+  border: 2px solid var(--app-accent-color);
+}
+.root:disabled {
+  border: 2px solid #383838;
+  background-color: #000;
+  color: #383838;
+}
+
+.root.fullWidth {
+  width: 100%;
+}
