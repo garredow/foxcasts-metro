@@ -69,7 +69,7 @@ export function Player(props: Props) {
   return (
     <Screen
       className={styles.root}
-      title={podcast?.title || 'podcast'}
+      title="Player"
       backgroundImageUrl={podcast?.artworkUrl}
       tabs={panels}
       activePanel={panels.find((a) => a.id === panelId)?.id}
@@ -137,28 +137,35 @@ export function Player(props: Props) {
             />
           );
         })}
-        {chapters === null ? <Loading /> : null}
+        {chapters === null && episode ? <Loading /> : null}
+        {!episode ? <Typography>Nothing is playing</Typography> : null}
         {chapters?.length === 0 ? (
           <Typography>This episode does not have chapters.</Typography>
         ) : null}
       </Panel>
       <Panel>
-        <Typography>{episode?.description}</Typography>
-        <Typography type="subtitle">Published Date</Typography>
-        <Typography color="accent">
-          {new Date(episode?.date || '').toLocaleString()}
-        </Typography>
-        <Typography type="subtitle">Duration</Typography>
-        <Typography color="accent">
-          {formatTime(episode?.duration || 0)}
-        </Typography>
-        <Typography type="subtitle">File Size</Typography>
-        <Typography color="accent">
-          {formatFileSize(episode?.fileSize || 0)}
-        </Typography>
-        <Typography type="title">About the author</Typography>
-        <Typography type="bodyLarge">{podcast?.title}</Typography>
-        <Typography>{podcast?.description}</Typography>
+        {episode ? (
+          <>
+            <Typography>{episode?.description}</Typography>
+            <Typography type="subtitle">Published Date</Typography>
+            <Typography color="accent">
+              {new Date(episode?.date || '').toLocaleString()}
+            </Typography>
+            <Typography type="subtitle">Duration</Typography>
+            <Typography color="accent">
+              {formatTime(episode?.duration || 0)}
+            </Typography>
+            <Typography type="subtitle">File Size</Typography>
+            <Typography color="accent">
+              {formatFileSize(episode?.fileSize || 0)}
+            </Typography>
+            <Typography type="title">About the author</Typography>
+            <Typography type="bodyLarge">{podcast?.title}</Typography>
+            <Typography>{podcast?.description}</Typography>
+          </>
+        ) : (
+          <Typography>Nothing is playing</Typography>
+        )}
       </Panel>
     </Screen>
   );
