@@ -44,9 +44,9 @@ export function Screen({ panelPeek = false, ...props }: Props) {
   const scrollingDone = useCallback<any>(
     _.debounce((ev: any) => {
       const panels = ev.target as HTMLDivElement;
-      const index = Array.from(panels.children).findIndex(
-        (a) => Math.round(a.getBoundingClientRect().left) === 0
-      );
+      const index = Array.from(panels.children).findIndex((a: any, i) => {
+        return Math.round(a.offsetLeft) === panels.scrollLeft;
+      });
 
       props.onPanelChanged?.(index);
     }, 200),
@@ -58,7 +58,6 @@ export function Screen({ panelPeek = false, ...props }: Props) {
 
     const panelsDiff = panels.scrollWidth - panels.clientWidth;
     const progress = (panels.scrollLeft / panelsDiff) * 100;
-    // console.log('scroll', progress);
     props.onScroll?.(progress);
 
     const background = backgroundRef?.current as unknown as HTMLDivElement;
