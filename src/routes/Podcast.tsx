@@ -46,7 +46,7 @@ export function PodcastDetail(props: Props) {
       title={podcast?.title || 'podcast'}
       backgroundImageUrl={podcast?.artworkUrl}
       tabs={panels}
-      initialPanelIndex={panels.findIndex((a) => a.id === panelId)}
+      activePanel={panels.find((a) => a.id === panelId)?.id}
       panelPeek={false}
       onPanelChanged={(index) => {
         if (index === -1) {

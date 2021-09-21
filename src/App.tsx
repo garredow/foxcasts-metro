@@ -68,7 +68,7 @@ export default function App() {
           component={EpisodeDetail}
         />
         <AnimatedRoute path="/playlist/:playlist" component={Playlists} />
-        <AnimatedRoute path="/player" component={Player} />
+        <AnimatedRoute path="/player/:panelId" component={Player} />
         <Route path="/" exact>
           <Redirect to="/home/collection" />
         </Route>

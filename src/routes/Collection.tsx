@@ -523,7 +523,7 @@ export function Collection(props: Props) {
       className={styles.root}
       title="Collection"
       tabs={panels}
-      initialPanelIndex={panels.findIndex((a) => a.id === panelId)}
+      activePanel={panels.find((a) => a.id === panelId)?.id}
       onPanelChanged={(index) => {
         if (index === -1) {
           return;

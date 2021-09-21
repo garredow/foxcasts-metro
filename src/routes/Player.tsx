@@ -1,6 +1,7 @@
 import { Chapter, Podcast } from 'foxcasts-core/lib/types';
 import { formatFileSize, formatTime } from 'foxcasts-core/lib/utils';
 import { useEffect, useState } from 'react';
+import { useHistory, useParams } from 'react-router-dom';
 import { PlaybackStatus, usePlayer } from '../contexts/PlayerProvider';
 import { ComponentBaseProps } from '../models';
 import { Core } from '../services/core';
@@ -13,12 +14,16 @@ import { Screen } from '../ui-components/Screen';
 import { Typography } from '../ui-components/Typography';
 import styles from './Player.module.css';
 
+type Params = {
+  panelId: string;
+};
+
 type Props = ComponentBaseProps & {
   headerText?: string;
 };
 
 const panels = [
-  { id: 'player', label: 'player' },
+  { id: 'status', label: 'status' },
   { id: 'chapters', label: 'chapters' },
   { id: 'info', label: 'info' },
 ];
@@ -31,6 +36,8 @@ export function Player(props: Props) {
     duration: 0,
   });
   const [chapters, setChapters] = useState<Chapter[] | null>(null);
+  const history = useHistory();
+  const { panelId } = useParams<Params>();
 
   const { episode, ...player } = usePlayer();
 
@@ -65,6 +72,13 @@ export function Player(props: Props) {
       title={podcast?.title || 'podcast'}
       backgroundImageUrl={podcast?.artworkUrl}
       tabs={panels}
+      activePanel={panels.find((a) => a.id === panelId)?.id}
+      onPanelChanged={(index) => {
+        if (index === -1) {
+          return;
+        }
+        history.replace(`/player/${panels[index].id}`);
+      }}
     >
       <Panel paddingRight={true}>
         {episode ? (

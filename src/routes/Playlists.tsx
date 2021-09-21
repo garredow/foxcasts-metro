@@ -48,7 +48,7 @@ export function Playlists(props: Props) {
       className={styles.root}
       title="Playlists"
       tabs={panels}
-      initialPanelIndex={panels.findIndex((a) => a.id === playlist)}
+      activePanel={panels.find((a) => a.id === playlist)?.id}
       onPanelChanged={(index) => {
         if (index === -1) {
           return;

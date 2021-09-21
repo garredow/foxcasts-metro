@@ -14,7 +14,7 @@ type Props = ComponentBaseProps & {
   title?: string;
   panelPeek?: boolean;
   backgroundImageUrl?: string;
-  initialPanelIndex?: number;
+  activePanel?: string;
   headerRef?: any;
   tabs?: Tab[];
   onScroll?: (progress: number) => void;
@@ -29,8 +29,10 @@ export function Screen({ panelPeek = false, ...props }: Props) {
 
   useEffect(() => {
     const panels = panelsRef.current as unknown as HTMLDivElement;
-    if (panels && props.initialPanelIndex !== undefined) {
-      panels.scrollLeft = panels.clientWidth * props.initialPanelIndex;
+    const panelIndex =
+      props.tabs?.findIndex((a) => a.id === props.activePanel) || -1;
+    if (panels && props.activePanel && panelIndex >= 0) {
+      panels.scrollLeft = panels.clientWidth * panelIndex;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -70,12 +72,17 @@ export function Screen({ panelPeek = false, ...props }: Props) {
       heroText.style.transform = `translateX(-${newLeft}px)`;
     }
 
-    // TODO: Scroll tabs
-    // const tabs = tabsRef?.current as unknown as HTMLDivElement;
-    // const panelSizePct = 100 / (panels.length - 1);
-    // const panelIndex = panels.findIndex(
-    //   (panel, i) => progress < (i + 1) * panelSizePct - 0.0001
-    // );
+    // TODO: Temporary. Need more WP accurate scrolling tabs
+    const tabs = tabsRef?.current as unknown as HTMLDivElement;
+    if (tabs && panels) {
+      // const panelSizePct = 100 / (panels.children.length - 1);
+      // const panelIndex = Array.from(panels.children).findIndex(
+      //   (panel, i) => progress < (i + 1) * panelSizePct - 0.0001
+      // );
+      const diff = tabs.scrollWidth - tabs.clientWidth;
+      const newLeft = (progress / 100) * diff;
+      tabs.style.transform = `translateX(-${newLeft}px)`;
+    }
 
     scrollingDone(ev);
   }
@@ -99,7 +106,12 @@ export function Screen({ panelPeek = false, ...props }: Props) {
         {props.tabs ? (
           <div className={styles.tabs} ref={tabsRef}>
             {props.tabs.map((tab) => (
-              <div key={tab.id}>{tab.label}</div>
+              <div
+                key={tab.id}
+                className={ifClass(tab.id === props.activePanel, styles.active)}
+              >
+                {tab.label}
+              </div>
             ))}
           </div>
         ) : null}

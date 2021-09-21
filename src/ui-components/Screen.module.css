@@ -30,7 +30,6 @@
 
 .tabs {
   display: flex;
-  overflow-x: auto;
   padding: 6px 0 12px 0;
   white-space: nowrap;
 }
@@ -42,6 +41,8 @@
 }
 .tabs > div:first-of-type {
   padding-left: 12px;
+}
+.tabs > div.active {
   color: var(--primary-text-color);
 }
 

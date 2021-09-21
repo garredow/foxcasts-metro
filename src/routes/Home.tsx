@@ -66,7 +66,7 @@ export default function Home(props: Props) {
     // }
     switch (screen) {
       case 'player':
-        history.push(`/player`);
+        history.push(`/player/status`);
         break;
       case 'podcasts':
       case 'episodes':
@@ -87,14 +87,13 @@ export default function Home(props: Props) {
       heroText="foxcasts metro"
       panelPeek={true}
       backgroundImageUrl={podcast?.artworkUrl}
-      initialPanelIndex={(() => {
-        let index = panels.findIndex((a) => a.id === panelId);
-        if (!player.episode) index--;
-        return index;
-      })()}
+      activePanel={panels.find((a) => a.id === panelId)?.id}
       onPanelChanged={(index) => {
         if (index === -1) {
           return;
+        }
+        if (!player.episode) {
+          index++;
         }
         history.replace(`/home/${panels[index].id}`);
       }}
