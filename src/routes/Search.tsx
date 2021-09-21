@@ -11,7 +11,7 @@ import { Panel } from '../ui-components/Panel';
 import { Screen } from '../ui-components/Screen';
 import { Typography } from '../ui-components/Typography';
 import { getStorageItem, setStorageItem, StorageKey } from '../utils/storage';
-import styles from './EpisodeDetail.module.css';
+import styles from './Search.module.css';
 
 type Params = {
   panelId: string;

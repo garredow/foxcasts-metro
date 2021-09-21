@@ -13,6 +13,7 @@ import { PodcastDetail } from './routes/Podcast';
 import './App.css';
 import { Search } from './routes/Search';
 import { PodcastPreview } from './routes/PodcastPreview';
+import { System } from './routes/System';
 
 export function AppWrapper() {
   return (
@@ -77,6 +78,7 @@ export default function App() {
         <AnimatedRoute path="/playlist/:playlist" component={Playlists} />
         <AnimatedRoute path="/player/:panelId" component={Player} />
         <AnimatedRoute path="/search/:panelId" component={Search} />
+        <AnimatedRoute path="/system/:panelId" component={System} />
         <Route path="/" exact>
           <Redirect to="/home/collection" />
         </Route>

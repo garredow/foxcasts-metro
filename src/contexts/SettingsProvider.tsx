@@ -1,19 +1,11 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import {
-  ComponentBaseProps,
-  DisplayDensity,
-  PodcastsLayout,
-  Settings,
-  Theme,
-} from '../models';
+import { ComponentBaseProps, PodcastsLayout, Settings, Theme } from '../models';
 import { getStorageItem, setStorageItem, StorageKey } from '../utils/storage';
 
 const defaultSettings: Settings = {
-  displayDensity: DisplayDensity.Compact,
   podcastsLayout: PodcastsLayout.Grid,
-  fullScreen: false,
-  theme: Theme.Light,
-  accentColor: 'ec5817',
+  theme: Theme.Dark,
+  accentColor: '1ba1e2',
 };
 
 type SettingsContextValue = {

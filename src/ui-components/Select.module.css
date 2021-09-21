@@ -1,0 +1,60 @@
+.root {
+  margin: 12px 0;
+}
+
+.root.fullWidth {
+  width: 100%;
+}
+
+.label {
+  color: var(--secondary-text-color);
+  margin-bottom: 6px;
+}
+
+.container {
+  border: 3px solid #fff;
+  color: #fff;
+  font-weight: 600;
+  font-size: 16px;
+  padding: 6px;
+  overflow: hidden;
+
+  transition: max-height 300ms;
+}
+
+.container.open {
+  background-color: #fff;
+  color: #000;
+  border: 3px solid var(--app-accent-color);
+}
+.container.disabled {
+  border: 3px solid #383838;
+  background-color: #000;
+  color: #383838;
+}
+
+.container.open .options {
+  transform: translateY(0px) !important;
+}
+
+.options {
+  transition: transform 300ms;
+  transform: translateY(-157px);
+}
+
+.option {
+  padding: 12px 0;
+  font-size: 18px;
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+}
+.container.open .option.selected {
+  color: var(--accent-text-color);
+}
+
+.option .colorBox {
+  height: 18px;
+  width: 18px;
+  margin-right: 6px;
+}
