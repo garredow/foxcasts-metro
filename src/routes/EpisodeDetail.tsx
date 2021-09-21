@@ -1,11 +1,13 @@
-import { EpisodeExtended, Podcast } from 'foxcasts-core/lib/types';
+import { Chapter, EpisodeExtended, Podcast } from 'foxcasts-core/lib/types';
 import { formatFileSize, formatTime } from 'foxcasts-core/lib/utils';
 import { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router';
 import { usePlayer } from '../contexts/PlayerProvider';
 import { ComponentBaseProps } from '../models';
 import { Core } from '../services/core';
+import { AppBar } from '../ui-components/AppBar';
 import { ListItem } from '../ui-components/ListItem';
+import { Loading } from '../ui-components/Loading';
 import { Panel } from '../ui-components/Panel';
 import { Screen } from '../ui-components/Screen';
 import { Typography } from '../ui-components/Typography';
@@ -21,7 +23,7 @@ type Props = ComponentBaseProps & {
 
 const panels = [
   { id: 'info', label: 'info' },
-  { id: 'actions', label: 'actions' },
+  { id: 'chapters', label: 'chapters' },
 ];
 
 export function EpisodeDetail(props: Props) {
@@ -29,6 +31,7 @@ export function EpisodeDetail(props: Props) {
   const { episodeId, panelId } = useParams<Params>();
   const [podcast, setPodcast] = useState<Podcast>();
   const [episode, setEpisode] = useState<EpisodeExtended>();
+  const [chapters, setChapters] = useState<Chapter[] | null>(null);
 
   const player = usePlayer();
 
@@ -42,6 +45,15 @@ export function EpisodeDetail(props: Props) {
         .then(setPodcast);
     }
   }, [episodeId]);
+
+  useEffect(() => {
+    if (panelId === 'chapters' && chapters === null && episode) {
+      console.log('get chapters');
+
+      Core.getEpisodeChapters(episode.id, episode.podexId).then(setChapters);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [panelId]);
 
   function handleAction(action: string) {
     if (!episode) return;
@@ -87,13 +99,37 @@ export function EpisodeDetail(props: Props) {
         <Typography color="accent" type="bodyLarge">
           {formatFileSize(episode?.fileSize || 0)}
         </Typography>
+        <AppBar
+          buttons={[{ id: 'play', label: 'Play', icon: 'play' }]}
+          listItems={[
+            { id: 'play', label: 'play' },
+            { id: 'resume', label: 'resume' },
+            { id: 'markPlayed', label: 'mark as played' },
+            { id: 'markUnplayed', label: 'mark as unplayed' },
+            { id: 'download', label: 'download' },
+          ]}
+          onAction={handleAction}
+        />
       </Panel>
       <Panel>
-        <ListItem primaryText="Play" onClick={() => handleAction('play')} />
-        <ListItem primaryText="Resume" />
-        <ListItem primaryText="Mark as played" />
-        <ListItem primaryText="Mark as unplayed" />
-        <ListItem primaryText="Download" />
+        {chapters?.map((chapter) => {
+          let times = formatTime(chapter.startTime / 1000);
+          if (chapter.endTime) {
+            times = `${times} - ${formatTime(chapter.endTime / 1000)}`;
+          }
+          return (
+            <ListItem
+              key={chapter.startTime}
+              primaryText={chapter.title}
+              secondaryText={times}
+            />
+          );
+        })}
+        {chapters === null ? <Loading /> : null}
+        {!episode ? <Typography>Nothing is playing</Typography> : null}
+        {chapters?.length === 0 ? (
+          <Typography>This episode does not have chapters.</Typography>
+        ) : null}
       </Panel>
     </Screen>
   );

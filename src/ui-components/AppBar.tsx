@@ -3,6 +3,7 @@ import { ComponentBaseProps } from '../models';
 import { ifClass, joinClasses } from '../utils/classes';
 import { Icon } from './Icon';
 import styles from './AppBar.module.css';
+import { ListItem } from './ListItem';
 
 export type TopItem = {
   id: string;
@@ -41,6 +42,13 @@ export function AppBar({ ...props }: Props) {
         <div className={styles.flex}></div>
         <Icon icon="overflow-dots" onClick={() => setOpen(!open)} />
       </div>
+      {props.listItems ? (
+        <div className={styles.list}>
+          {props.listItems.map((item) => (
+            <ListItem key={item.id} primaryText={item.label} />
+          ))}
+        </div>
+      ) : null}
     </div>
   );
 }
