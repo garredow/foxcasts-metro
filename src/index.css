@@ -27,18 +27,19 @@ body {
 
 body {
   --app-bg-color: #000;
+  --app-bg-image-cover-color: rgba(0, 0, 0, 0.7);
   --app-accent-color: #1ba1e2;
 
   --primary-text-color: rgba(255, 255, 255, 1);
   --secondary-text-color: rgba(255, 255, 255, 0.5);
   --accent-text-color: var(--app-accent-color);
 
-  --divider-color: rgba(255, 255, 255, 0.1);
+  --appbar-bg-color: #181818;
 
-  --menubar-bg-color: #000;
-  --menubar-text-color: rgba(255, 255, 255, 0.88);
-
-  --input-border-color: #777;
+  --resting-control-color: #b0b0b0;
+  --active-control-color: #fff;
+  --disabled-control-color: #383838;
+  --control-offset-text-color: #000;
 }
 
 * {

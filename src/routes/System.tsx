@@ -61,7 +61,7 @@ export function System(props: Props) {
           label="Background"
           value={settings.theme}
           options={[
-            { key: 'light', label: 'light' },
+            // { key: 'light', label: 'light' },
             { key: 'dark', label: 'dark' },
           ]}
           onChange={(val) => saveSetting('theme', val)}

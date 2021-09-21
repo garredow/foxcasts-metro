@@ -1,7 +1,7 @@
 .root {
   background-size: cover;
   background-blend-mode: darken;
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: var(--app-bg-image-cover-color);
   background-repeat: no-repeat;
 }
 

@@ -2,7 +2,7 @@
   font-size: 28px;
   white-space: nowrap;
   padding: 6px 0 6px 0;
-  font-weight: 300;
+  font-weight: 400;
   display: flex;
   align-items: center;
   overflow: hidden;
@@ -21,18 +21,18 @@
 
 .primaryText {
   font-size: 24px;
-  font-weight: 300;
+  font-weight: 400;
   color: var(--primary-text-color);
 }
 
 .secondaryText {
   font-size: 18px;
-  font-weight: 300;
+  font-weight: 400;
   color: var(--secondary-text-color);
 }
 
 .accentText {
   font-size: 16px;
-  font-weight: 300;
+  font-weight: 400;
   color: var(--accent-text-color);
 }

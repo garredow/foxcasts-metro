@@ -3,8 +3,8 @@
   outline: none;
   font-family: 'Open Sans', Helvetica, sans-serif;
 
-  border: 2px solid var(--primary-text-color);
-  color: var(--primary-text-color);
+  border: 3px solid var(--active-control-color);
+  color: var(--active-control-color);
   font-weight: 600;
   font-size: 16px;
   padding: 6px 12px;
@@ -13,12 +13,12 @@
 }
 
 .root:active {
-  background-color: #fff;
-  color: #000;
+  background-color: var(--active-control-color);
+  color: var(--control-offset-text-color);
 }
 .root:disabled {
-  border: 2px solid var(--secondary-text-color);
-  color: var(--secondary-text-color);
+  border: 3px solid var(--disabled-control-color);
+  color: var(--disabled-control-color);
 }
 
 .root.fullWidth {

@@ -3,9 +3,9 @@ import { ComponentBaseProps, PodcastsLayout, Settings, Theme } from '../models';
 import { getStorageItem, setStorageItem, StorageKey } from '../utils/storage';
 
 const defaultSettings: Settings = {
-  podcastsLayout: PodcastsLayout.Grid,
+  podcastsLayout: PodcastsLayout.List,
   theme: Theme.Dark,
-  accentColor: '1ba1e2',
+  accentColor: 'ec5817',
 };
 
 type SettingsContextValue = {

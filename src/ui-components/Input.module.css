@@ -3,9 +3,9 @@
   outline: none;
   font-family: 'Open Sans', Helvetica, sans-serif;
 
-  background-color: #b0b0b0;
-  border: 2px solid #b0b0b0;
-  color: #000;
+  background-color: var(--resting-control-color);
+  border: 3px solid var(--resting-control-color);
+  color: var(--control-offset-text-color);
   font-weight: 600;
   font-size: 16px;
   padding: 6px;
@@ -13,13 +13,12 @@
 }
 
 .root:focus {
-  background-color: #fff;
-  border: 2px solid var(--app-accent-color);
+  background-color: var(--active-control-color);
+  border: 3px solid var(--app-accent-color);
 }
 .root:disabled {
-  border: 2px solid #383838;
-  background-color: #000;
-  color: #383838;
+  border: 3px solid var(--disabled-control-color);
+  color: var(--disabled-control-color);
 }
 
 .root.fullWidth {

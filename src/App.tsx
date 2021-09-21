@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import { HashRouter as Router, Redirect, Route } from 'react-router-dom';
 import { CSSTransition } from 'react-transition-group';
 import { PlayerProvider } from './contexts/PlayerProvider';
-import { SettingsProvider } from './contexts/SettingsProvider';
+import { SettingsProvider, useSettings } from './contexts/SettingsProvider';
 import { Collection } from './routes/Collection';
 import { EpisodeDetail } from './routes/EpisodeDetail';
 import Home from './routes/Home';
@@ -14,6 +14,7 @@ import './App.css';
 import { Search } from './routes/Search';
 import { PodcastPreview } from './routes/PodcastPreview';
 import { System } from './routes/System';
+import { themes } from './themes';
 
 export function AppWrapper() {
   return (
@@ -50,12 +51,31 @@ function AnimatedRoute({ component: Component, ...rest }: any): JSX.Element {
 }
 
 export default function App() {
-  // const { settings } = useSettings();
+  const { settings } = useSettings();
 
   useEffect(() => {
     // Core.health().then((res) => console.log(res));
     // Core.checkForUpdates();
   }, []);
+
+  useEffect(() => {
+    // Theme
+    const theme = themes.find((a) => a.id === settings.theme) || themes[0];
+    for (const id in theme.values) {
+      document.body.style.setProperty(
+        `--${theme.values[id].variable}`,
+        theme.values[id].value
+      );
+    }
+    document.body.style.setProperty(
+      '--app-accent-color',
+      `#${settings.accentColor}`
+    );
+    document.body.style.setProperty(
+      '--accent-text-color',
+      `#${settings.accentColor}`
+    );
+  }, [settings]);
 
   return (
     <div className="container">

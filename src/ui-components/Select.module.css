@@ -12,8 +12,8 @@
 }
 
 .container {
-  border: 3px solid #fff;
-  color: #fff;
+  border: 3px solid var(--active-control-color);
+  color: var(--active-control-color);
   font-weight: 600;
   font-size: 16px;
   padding: 6px;
@@ -23,14 +23,13 @@
 }
 
 .container.open {
-  background-color: #fff;
-  color: #000;
+  background-color: var(--active-control-color);
+  color: var(--control-offset-text-color);
   border: 3px solid var(--app-accent-color);
 }
 .container.disabled {
-  border: 3px solid #383838;
-  background-color: #000;
-  color: #383838;
+  border: 3px solid var(--disabled-control-color);
+  color: var(--disabled-control-color);
 }
 
 .container.open .options {
