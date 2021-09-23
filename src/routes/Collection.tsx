@@ -1,9 +1,11 @@
 import { Podcast } from 'foxcasts-core/lib/types';
 import { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router';
-import { ComponentBaseProps } from '../models';
+import { useSettings } from '../contexts/SettingsProvider';
+import { ComponentBaseProps, PodcastsLayout } from '../models';
 import { Core } from '../services/core';
 import { Button } from '../ui-components/Button';
+import { GridItem } from '../ui-components/GridItem';
 import { ListItem } from '../ui-components/ListItem';
 import { Loading } from '../ui-components/Loading';
 import { Panel } from '../ui-components/Panel';
@@ -482,6 +484,7 @@ export function Collection(props: Props) {
   const [podcasts, setPodcasts] = useState<Podcast[] | null>(null);
   const { panelId } = useParams<Params>();
   const history = useHistory();
+  const { settings } = useSettings();
 
   useEffect(() => {
     if (panelId === 'podcasts' && podcasts === null) {
@@ -518,40 +521,56 @@ export function Collection(props: Props) {
     setSeeding(false);
   }
 
+  function renderPodcasts() {
+    if (podcasts === null) {
+      return <Loading />;
+    } else if (podcasts.length === 0) {
+      return (
+        <>
+          <Typography>
+            No podcasts to show. Would you like to add some?
+          </Typography>
+          <Button disabled={seeding} onClick={seedPodcasts}>
+            seed podcasts
+          </Button>
+        </>
+      );
+    } else if (settings.podcastsLayout === PodcastsLayout.Grid) {
+      return (
+        <div className={styles.grid}>
+          {podcasts?.map((podcast, i) => (
+            <GridItem
+              key={podcast.id}
+              imageUrl={podcast.artworkUrl}
+              onClick={() => navTo(`/podcast/${podcast.id}/info`)}
+            />
+          ))}
+        </div>
+      );
+    } else {
+      return podcasts.map((podcast) => (
+        <ListItem
+          key={podcast.id}
+          primaryText={podcast.title}
+          secondaryText={podcast.author}
+          imageUrl={podcast.artwork}
+          onClick={() => navTo(`/podcast/${podcast.id}/info`)}
+        />
+      ));
+    }
+  }
+
   return (
     <Screen
-      className={styles.root}
       title="Collection"
       tabs={panels}
       activePanel={panels.find((a) => a.id === panelId)?.id}
-      onPanelChanged={(index) => {
-        if (index === -1) {
-          return;
-        }
-        history.replace(`/collection/${panels[index].id}`);
-      }}
+      onPanelChanged={(index) =>
+        index >= 0 && history.replace(`/collection/${panels[index].id}`)
+      }
     >
-      <Panel>
-        {podcasts === null ? <Loading /> : null}
-        {podcasts?.map((podcast) => (
-          <ListItem
-            key={podcast.id}
-            primaryText={podcast.title}
-            secondaryText={podcast.author}
-            imageUrl={podcast.artwork}
-            onClick={() => navTo(`/podcast/${podcast.id}/info`)}
-          />
-        ))}
-        {podcasts?.length === 0 ? (
-          <>
-            <Typography>
-              No podcasts to show. Would you like to add some?
-            </Typography>
-            <Button disabled={seeding} onClick={seedPodcasts}>
-              seed podcasts
-            </Button>
-          </>
-        ) : null}
+      <Panel paddingRight={settings.podcastsLayout === PodcastsLayout.Grid}>
+        {renderPodcasts()}
       </Panel>
       <Panel>
         <ListItem primaryText="episodes" />

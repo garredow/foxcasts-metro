@@ -46,10 +46,15 @@ export function System(props: Props) {
       }}
     >
       <Panel paddingRight={true}>
-        <Typography type="bodyLarge">
-          There aren't any settings here yet, but there are some theme options
-          to try out.
-        </Typography>
+        <Select
+          label="Podcasts Layout"
+          value={settings.podcastsLayout}
+          options={[
+            { key: 'list', label: 'list' },
+            { key: 'grid', label: 'grid' },
+          ]}
+          onChange={(val) => saveSetting('podcastsLayout', val)}
+        />
       </Panel>
       <Panel paddingRight={true}>
         <Typography type="bodyLarge">
