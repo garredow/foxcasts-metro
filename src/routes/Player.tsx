@@ -60,6 +60,7 @@ export function Player(props: Props) {
     const timer = setInterval(() => {
       const status = player.getStatus();
       setStatus(status);
+      Core.updateEpisode(episode.id, { progress: status.currentTime });
     }, 1000);
 
     return (): void => clearInterval(timer);

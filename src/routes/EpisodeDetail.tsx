@@ -102,8 +102,10 @@ export function EpisodeDetail(props: Props) {
         <AppBar
           buttons={[{ id: 'play', label: 'Play', icon: 'play' }]}
           listItems={[
-            { id: 'play', label: 'play' },
-            { id: 'resume', label: 'resume' },
+            {
+              id: 'resume',
+              label: `resume at ${formatTime(episode?.progress || 0)}`,
+            },
             { id: 'markPlayed', label: 'mark as played' },
             { id: 'markUnplayed', label: 'mark as unplayed' },
             { id: 'download', label: 'download' },
