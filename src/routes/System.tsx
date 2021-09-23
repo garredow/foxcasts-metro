@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useHistory, useParams } from 'react-router';
 import { useSettings } from '../contexts/SettingsProvider';
 import { ComponentBaseProps, Settings } from '../models';
@@ -5,6 +6,8 @@ import { ListItem } from '../ui-components/ListItem';
 import { Panel } from '../ui-components/Panel';
 import { Screen } from '../ui-components/Screen';
 import { Select } from '../ui-components/Select';
+import { SettingsRow } from '../ui-components/SettingsRow';
+import { Toggle } from '../ui-components/Toggle';
 import { Typography } from '../ui-components/Typography';
 import styles from './System.module.css';
 
@@ -62,23 +65,59 @@ export function System(props: Props) {
           <span className={styles.accentText}>accent color</span> to match your
           mood today, this week, or all month.
         </Typography>
-        <Select
+        <SettingsRow
           label="Background"
-          value={settings.theme}
-          options={[
-            // { key: 'light', label: 'light' },
-            { key: 'dark', label: 'dark' },
-          ]}
-          onChange={(val) => saveSetting('theme', val)}
+          control={
+            <Select
+              value={settings.theme}
+              options={[
+                // { key: 'light', label: 'light' },
+                { key: 'dark', label: 'dark' },
+              ]}
+              onChange={(val) => saveSetting('theme', val)}
+            />
+          }
         />
-        <Select
-          label="Accent color"
-          value={settings.accentColor}
-          options={[
-            { key: '1ba1e2', label: 'Cyan', isColor: true },
-            { key: 'ec5817', label: 'Orange', isColor: true },
-          ]}
-          onChange={(val) => saveSetting('accentColor', val)}
+        <SettingsRow
+          label="Accent Color"
+          control={
+            <Select
+              value={settings.accentColor}
+              options={[
+                { key: '1ba1e2', label: 'Cyan', isColor: true },
+                { key: 'ec5817', label: 'Orange', isColor: true },
+              ]}
+              onChange={(val) => saveSetting('accentColor', val)}
+            />
+          }
+        />
+        <Typography type="bodyLarge">
+          You can change the background and accent color of the app depending on
+          which screen you're on or what you're listening to.
+        </Typography>
+        <SettingsRow
+          label="Dynamic Background"
+          text={settings.dynamicBackground ? 'On' : 'Off'}
+          control={
+            <Toggle
+              value={settings.dynamicBackground}
+              onClick={() =>
+                saveSetting('dynamicBackground', !settings.dynamicBackground)
+              }
+            />
+          }
+        />
+        <SettingsRow
+          label="Dynamic Accent Color"
+          text={settings.dynamicAccentColor ? 'On' : 'Off'}
+          control={
+            <Toggle
+              value={settings.dynamicAccentColor}
+              onClick={() =>
+                saveSetting('dynamicAccentColor', !settings.dynamicAccentColor)
+              }
+            />
+          }
         />
       </Panel>
       <Panel paddingRight={true}>

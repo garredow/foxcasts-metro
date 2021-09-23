@@ -6,6 +6,8 @@ const defaultSettings: Settings = {
   podcastsLayout: PodcastsLayout.List,
   theme: Theme.Dark,
   accentColor: 'ec5817',
+  dynamicBackground: true,
+  dynamicAccentColor: true,
 };
 
 type SettingsContextValue = {
@@ -25,12 +27,10 @@ const SettingsContext = createContext<SettingsContextValue>(defaultValue);
 type SettingsProviderProps = ComponentBaseProps;
 
 export function SettingsProvider(props: SettingsProviderProps) {
-  const [settings, setSettingsInternal] = useState<Settings>(defaultSettings);
-
-  useEffect(() => {
-    const result = getStorageItem<Settings>(StorageKey.Settings);
-    setSettingsInternal({ ...defaultSettings, ...result });
-  }, []);
+  const [settings, setSettingsInternal] = useState<Settings>({
+    ...defaultSettings,
+    ...getStorageItem<Settings>(StorageKey.Settings),
+  });
 
   function setSettings(val: Settings): void {
     setStorageItem<Settings>(StorageKey.Settings, val);

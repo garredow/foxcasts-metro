@@ -1,0 +1,19 @@
+.root {
+  padding: 6px 0;
+  margin-bottom: 6px;
+}
+
+.label {
+  color: var(--secondary-text-color);
+  margin-bottom: 6px;
+}
+
+.content {
+  display: flex;
+  justify-content: space-between;
+}
+
+.text {
+  font-size: 24px;
+  font-weight: 500;
+}
