@@ -6,7 +6,7 @@ type Props = ComponentBaseProps & {
   icon: string;
   size?: 'small' | 'medium' | 'large';
   label?: string;
-  onClick?: () => void;
+  onClick?: (ev: any) => void;
 };
 
 export function Icon({ size = 'medium', ...props }: Props) {

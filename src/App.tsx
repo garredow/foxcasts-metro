@@ -16,15 +16,19 @@ import { PodcastPreview } from './routes/PodcastPreview';
 import { System } from './routes/System';
 import { themes } from './themes';
 import { ThemeProvider, useTheme } from './contexts/ThemeProvider';
+import { AppBar } from './ui-components/AppBar';
+import { AppBarProvider } from './contexts/AppBarProvider';
 
 export function AppWrapper() {
   return (
     <div id="preact_root">
       <SettingsProvider>
         <ThemeProvider>
-          <PlayerProvider>
-            <App />
-          </PlayerProvider>
+          <AppBarProvider>
+            <PlayerProvider>
+              <App />
+            </PlayerProvider>
+          </AppBarProvider>
         </ThemeProvider>
       </SettingsProvider>
     </div>
@@ -137,6 +141,7 @@ export default function App() {
             <Redirect to="/home/collection" />
           </Route>
         </Router>
+        <AppBar />
       </div>
     </div>
   );

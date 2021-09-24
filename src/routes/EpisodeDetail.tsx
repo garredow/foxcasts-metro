@@ -2,10 +2,10 @@ import { Chapter, EpisodeExtended, Podcast } from 'foxcasts-core/lib/types';
 import { formatFileSize, formatTime } from 'foxcasts-core/lib/utils';
 import { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router';
+import { useAppBar } from '../contexts/AppBarProvider';
 import { usePlayer } from '../contexts/PlayerProvider';
 import { ComponentBaseProps } from '../models';
 import { Core } from '../services/core';
-import { AppBar } from '../ui-components/AppBar';
 import { ListItem } from '../ui-components/ListItem';
 import { Loading } from '../ui-components/Loading';
 import { Panel } from '../ui-components/Panel';
@@ -34,6 +34,24 @@ export function EpisodeDetail(props: Props) {
   const [chapters, setChapters] = useState<Chapter[] | null>(null);
 
   const player = usePlayer();
+  const { setCommands } = useAppBar();
+
+  useEffect(() => {
+    setCommands({
+      top: [{ id: 'play', label: 'Play', icon: 'play' }],
+      bottom: [
+        {
+          id: 'resume',
+          label: `resume at ${formatTime(episode?.progress || 0)}`,
+        },
+        { id: 'markPlayed', label: 'mark as played' },
+        { id: 'markUnplayed', label: 'mark as unplayed' },
+        { id: 'download', label: 'download' },
+      ],
+      callback: handleCommand,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [episode]);
 
   useEffect(() => {
     if (episodeId) {
@@ -55,10 +73,10 @@ export function EpisodeDetail(props: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [panelId]);
 
-  function handleAction(action: string) {
+  function handleCommand(command: string) {
     if (!episode) return;
 
-    switch (action) {
+    switch (command) {
       case 'play':
         player.load(episode.id, false);
         break;
@@ -74,6 +92,7 @@ export function EpisodeDetail(props: Props) {
       title={podcast?.title || 'podcast'}
       backgroundImageUrl={podcast?.artwork}
       dynamicTheme={!!podcast?.artwork}
+      disableAppBar={false}
       tabs={panels}
       activePanel={panels.find((a) => a.id === panelId)?.id}
       panelPeek={false}
@@ -100,19 +119,6 @@ export function EpisodeDetail(props: Props) {
         <Typography color="accent" type="bodyLarge">
           {formatFileSize(episode?.fileSize || 0)}
         </Typography>
-        <AppBar
-          buttons={[{ id: 'play', label: 'Play', icon: 'play' }]}
-          listItems={[
-            {
-              id: 'resume',
-              label: `resume at ${formatTime(episode?.progress || 0)}`,
-            },
-            { id: 'markPlayed', label: 'mark as played' },
-            { id: 'markUnplayed', label: 'mark as unplayed' },
-            { id: 'download', label: 'download' },
-          ]}
-          onAction={handleAction}
-        />
       </Panel>
       <Panel>
         {chapters?.map((chapter) => {

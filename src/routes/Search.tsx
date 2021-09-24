@@ -1,10 +1,10 @@
 import { SearchResult } from 'foxcasts-core/lib/types';
 import { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router';
+import { useAppBar } from '../contexts/AppBarProvider';
 import { useQuery } from '../hooks/useQuery';
 import { ComponentBaseProps } from '../models';
 import { Core } from '../services/core';
-import { Button } from '../ui-components/Button';
 import { Input } from '../ui-components/Input';
 import { ListItem } from '../ui-components/ListItem';
 import { Panel } from '../ui-components/Panel';
@@ -31,8 +31,8 @@ export function Search(props: Props) {
   const [searches, setSearches] = useState<string[]>([]);
   const history = useHistory();
   const { panelId } = useParams<Params>();
-
   const queryParams = useQuery();
+  const { setCommands } = useAppBar();
 
   useEffect(() => {
     setSearches(getStorageItem(StorageKey.RecentSearches) || []);
@@ -44,6 +44,18 @@ export function Search(props: Props) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (panelId === 'recent') {
+      setCommands({
+        top: [{ id: 'clear', label: 'Clear', icon: 'delete' }],
+        bottom: [],
+        callback: clearRecents,
+      });
+    } else {
+      setCommands(null);
+    }
+  }, [panelId, setCommands]);
 
   function search(q: string, updateHistory = false) {
     history.replace(`/search/search?q=${q}`);
@@ -75,6 +87,7 @@ export function Search(props: Props) {
       activePanel={panels.find((a) => a.id === panelId)?.id}
       panelPeek={false}
       dynamicTheme={true}
+      disableAppBar={false}
       onPanelChanged={(index) => {
         if (index === -1) {
           return;
@@ -115,9 +128,7 @@ export function Search(props: Props) {
         ))}
         {searches.length === 0 ? (
           <Typography>No recent searches.</Typography>
-        ) : (
-          <Button onClick={clearRecents}>Clear Searches</Button>
-        )}
+        ) : null}
       </Panel>
     </Screen>
   );

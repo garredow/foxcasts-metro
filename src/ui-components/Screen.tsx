@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import { useCallback, useEffect, useRef } from 'react';
+import { useAppBar } from '../contexts/AppBarProvider';
 import { useSettings } from '../contexts/SettingsProvider';
 import { useTheme } from '../contexts/ThemeProvider';
 import { ComponentBaseProps } from '../models';
@@ -17,6 +18,7 @@ type Props = ComponentBaseProps & {
   panelPeek?: boolean;
   backgroundImageUrl?: string;
   dynamicTheme?: boolean;
+  disableAppBar?: boolean;
   activePanel?: string;
   headerRef?: any;
   tabs?: Tab[];
@@ -27,6 +29,7 @@ type Props = ComponentBaseProps & {
 export function Screen({
   panelPeek = false,
   dynamicTheme = false,
+  disableAppBar = true,
   ...props
 }: Props) {
   const rootRef = useRef(null);
@@ -41,6 +44,13 @@ export function Screen({
     setBackgroundVisible,
     theme,
   } = useTheme();
+  const { setCommands } = useAppBar();
+
+  useEffect(() => {
+    if (disableAppBar) {
+      setCommands(null);
+    }
+  }, [disableAppBar, setCommands]);
 
   useEffect(() => {
     const panels = panelsRef.current as unknown as HTMLDivElement;

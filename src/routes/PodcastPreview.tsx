@@ -2,9 +2,9 @@ import { ApiEpisode, ApiPodcast } from 'foxcasts-core/lib/types';
 import { NotFoundError } from 'foxcasts-core/lib/utils';
 import { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router';
+import { useAppBar } from '../contexts/AppBarProvider';
 import { ComponentBaseProps } from '../models';
 import { Core } from '../services/core';
-import { AppBar } from '../ui-components/AppBar';
 import { ListItem } from '../ui-components/ListItem';
 import { Panel } from '../ui-components/Panel';
 import { Screen } from '../ui-components/Screen';
@@ -32,6 +32,8 @@ export function PodcastPreview(props: Props) {
   const [subscribed, setSubscribed] = useState(false);
   const [subscribing, setSubscribing] = useState(false);
 
+  const { setCommands } = useAppBar();
+
   useEffect(() => {
     const podId = parseInt(podexId, 10);
     Core.fetchPodcast(podId).then(setPodcast);
@@ -46,12 +48,26 @@ export function PodcastPreview(props: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  async function handleAction(action: string) {
+  useEffect(() => {
+    setCommands({
+      top: [
+        subscribed
+          ? { id: 'unsubscribe', label: 'Unsubscribe', icon: 'delete' }
+          : { id: 'subscribe', label: 'Subscribe', icon: 'add' },
+      ],
+      bottom: [],
+      callback: handleCommand,
+    });
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [subscribed]);
+
+  async function handleCommand(command: string) {
     if (subscribing) {
       return;
     }
 
-    switch (action) {
+    switch (command) {
       case 'subscribe':
         setSubscribing(true);
         await Core.subscribeByPodexId(parseInt(podexId, 10))
@@ -80,6 +96,7 @@ export function PodcastPreview(props: Props) {
       tabs={panels}
       activePanel={panels.find((a) => a.id === panelId)?.id}
       panelPeek={false}
+      disableAppBar={false}
       onPanelChanged={(index) => {
         if (index === -1) {
           return;
@@ -107,14 +124,6 @@ export function PodcastPreview(props: Props) {
         {podcast?.categories.map((category) => (
           <ListItem key={category} primaryText={category} />
         ))}
-        <AppBar
-          buttons={[
-            subscribed
-              ? { id: 'unsubscribe', label: 'Unsubscribe', icon: 'delete' }
-              : { id: 'subscribe', label: 'Subscribe', icon: 'add' },
-          ]}
-          onAction={handleAction}
-        />
       </Panel>
       <Panel>
         {episodes?.map((episode) => (

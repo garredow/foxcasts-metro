@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ComponentBaseProps } from '../models';
-import { ifClass, joinClasses } from '../utils/classes';
+import { joinClasses } from '../utils/classes';
 import { Icon } from './Icon';
 import styles from './AppBar.module.css';
 import { ListItem } from './ListItem';
+import { useAppBar } from '../contexts/AppBarProvider';
 
 export type TopItem = {
   id: string;
@@ -16,43 +17,70 @@ export type BottomItem = {
   label: string;
 };
 
-type Props = ComponentBaseProps & {
-  buttons: TopItem[];
-  listItems?: BottomItem[];
-  onAction?: (action: string) => void;
-};
+type Props = ComponentBaseProps;
 
-export function AppBar({ ...props }: Props) {
-  const [open, setOpen] = useState(false);
+export function AppBar(props: Props) {
+  const [openState, setOpenState] = useState<
+    'hidden' | 'peek' | 'icons' | 'open'
+  >('hidden');
+  const [isOpen, setIsOpen] = useState(false);
+  const { commands } = useAppBar();
+
+  useEffect(() => {
+    const isEmpty =
+      !commands || (commands.top.length === 0 && commands.bottom.length === 0);
+
+    if (isEmpty) {
+      setIsOpen(false);
+      setOpenState('hidden');
+    } else if (isOpen) {
+      setOpenState('open');
+    } else if (!isOpen && commands.top.length === 0) {
+      setOpenState('peek');
+    } else {
+      setOpenState('icons');
+    }
+  }, [isOpen, commands]);
 
   return (
-    <div className={joinClasses(styles.root, ifClass(open, styles.open))}>
-      <div className={styles.buttons}>
-        <div className={styles.placeholder}></div>
-        <div className={styles.flex}></div>
-        {props.buttons.map((a) => (
-          <Icon
-            key={a.id}
-            className={styles.button}
-            icon={a.icon}
-            label={a.label}
-            onClick={() => props.onAction?.(a.id)}
-          />
-        ))}
-        <div className={styles.flex}></div>
-        <Icon icon="overflow-dots" onClick={() => setOpen(!open)} />
-      </div>
-      {props.listItems ? (
-        <div className={styles.list}>
-          {props.listItems.map((item) => (
-            <ListItem
-              key={item.id}
-              primaryText={item.label}
-              onClick={() => props.onAction?.(item.id)}
+    <div
+      className={joinClasses(styles.root, styles[`state-${openState}`])}
+      onClick={() => setIsOpen(false)}
+    >
+      <div className={joinClasses(styles.appbar, styles[`state-${openState}`])}>
+        <div className={styles.buttons}>
+          <div className={styles.placeholder}></div>
+          <div className={styles.flex}></div>
+          {commands?.top.map((a) => (
+            <Icon
+              key={a.id}
+              className={styles.button}
+              icon={a.icon}
+              label={a.label}
+              onClick={() => commands.callback(a.id)}
             />
           ))}
+          <div className={styles.flex}></div>
+          <Icon
+            icon="overflow-dots"
+            onClick={(ev: any) => {
+              ev.stopPropagation();
+              setIsOpen(!isOpen);
+            }}
+          />
         </div>
-      ) : null}
+        {commands && commands.bottom.length > 0 ? (
+          <div className={styles.list}>
+            {commands.bottom.map((item) => (
+              <ListItem
+                key={item.id}
+                primaryText={item.label}
+                onClick={() => commands.callback(item.id)}
+              />
+            ))}
+          </div>
+        ) : null}
+      </div>
     </div>
   );
 }
