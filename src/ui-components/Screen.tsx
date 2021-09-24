@@ -1,5 +1,7 @@
 import _ from 'lodash';
 import { useCallback, useEffect, useRef } from 'react';
+import { useSettings } from '../contexts/SettingsProvider';
+import { useTheme } from '../contexts/ThemeProvider';
 import { ComponentBaseProps } from '../models';
 import { ifClass, joinClasses } from '../utils/classes';
 import styles from './Screen.module.css';
@@ -14,6 +16,7 @@ type Props = ComponentBaseProps & {
   title?: string;
   panelPeek?: boolean;
   backgroundImageUrl?: string;
+  dynamicTheme?: boolean;
   activePanel?: string;
   headerRef?: any;
   tabs?: Tab[];
@@ -21,11 +24,23 @@ type Props = ComponentBaseProps & {
   onPanelChanged?: (index: number) => void;
 };
 
-export function Screen({ panelPeek = false, ...props }: Props) {
-  const backgroundRef = useRef(null);
+export function Screen({
+  panelPeek = false,
+  dynamicTheme = false,
+  ...props
+}: Props) {
+  const rootRef = useRef(null);
   const heroTextRef = useRef(null);
   const tabsRef = useRef(null);
   const panelsRef = useRef(null);
+
+  const { settings } = useSettings();
+  const {
+    setBackgroundImage,
+    setBackgroundScroll,
+    setBackgroundVisible,
+    theme,
+  } = useTheme();
 
   useEffect(() => {
     const panels = panelsRef.current as unknown as HTMLDivElement;
@@ -39,6 +54,30 @@ export function Screen({ panelPeek = false, ...props }: Props) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.activePanel]);
+
+  useEffect(() => {
+    if (props.backgroundImageUrl) {
+      setBackgroundImage(props.backgroundImageUrl);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.backgroundImageUrl]);
+
+  useEffect(() => {
+    setBackgroundVisible(dynamicTheme);
+    const root = rootRef.current as unknown as HTMLDivElement;
+
+    if (!settings.dynamicAccentColor || !dynamicTheme) {
+      root?.style.removeProperty('--app-accent-color');
+      root?.style.removeProperty('--accent-text-color');
+      return;
+    }
+
+    if (theme.accentColor) {
+      root.style.setProperty('--app-accent-color', `${theme.accentColor}`);
+      root.style.setProperty('--accent-text-color', `${theme.accentColor}`);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [theme.accentColor, settings.dynamicAccentColor, dynamicTheme]);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const scrollingDone = useCallback<any>(
@@ -60,11 +99,8 @@ export function Screen({ panelPeek = false, ...props }: Props) {
     const progress = (panels.scrollLeft / panelsDiff) * 100;
     props.onScroll?.(progress);
 
-    const background = backgroundRef?.current as unknown as HTMLDivElement;
-    if (background && panels) {
-      // const diff = background.scrollWidth - background.clientWidth;
-      // const newLeft = (progress / 100) * diff;
-      background.style.backgroundPositionX = `${progress * -2}px`;
+    if (dynamicTheme) {
+      setBackgroundScroll(progress);
     }
 
     const heroText = heroTextRef?.current as unknown as HTMLDivElement;
@@ -89,15 +125,7 @@ export function Screen({ panelPeek = false, ...props }: Props) {
     scrollingDone(ev);
   }
   return (
-    <div
-      ref={backgroundRef}
-      className={styles.root}
-      style={
-        props.backgroundImageUrl
-          ? { backgroundImage: `url(${props.backgroundImageUrl})` }
-          : {}
-      }
-    >
+    <div ref={rootRef} className={styles.root}>
       <div className={styles.content}>
         {props.heroText ? (
           <div className={styles.heroText} ref={heroTextRef}>

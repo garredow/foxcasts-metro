@@ -19,5 +19,6 @@ export type Settings = {
 export type ThemeSettings = {
   accentColor: string | null;
   backgroundImage: string | null;
+  backgroundVisible: boolean;
   backgroundScroll: number;
 };

@@ -11,6 +11,8 @@ import styles from './Home.module.css';
 import { useEffect, useState } from 'react';
 import { Icon } from '../ui-components/Icon';
 import { Core } from '../services/core';
+import { useTheme } from '../contexts/ThemeProvider';
+import { useSettings } from '../contexts/SettingsProvider';
 
 type Params = {
   panelId: string;
@@ -36,9 +38,12 @@ export default function Home(props: Props) {
   const history = useHistory();
   const { panelId } = useParams<Params>();
   const player = usePlayer();
+  const { theme, reset } = useTheme();
+  const { settings } = useSettings();
 
   useEffect(() => {
     if (!player.episode) {
+      reset();
       setPodcast(null);
       return;
     }
@@ -90,7 +95,8 @@ export default function Home(props: Props) {
     <Screen
       heroText="foxcasts metro"
       panelPeek={true}
-      backgroundImageUrl={podcast?.artworkUrl}
+      backgroundImageUrl={podcast?.artwork}
+      dynamicTheme={!!podcast?.artwork}
       activePanel={panels.find((a) => a.id === panelId)?.id}
       onPanelChanged={(index) => {
         if (index === -1) {
@@ -153,9 +159,41 @@ export default function Home(props: Props) {
       <Panel headerText="get podcasts">
         <Typography type="subtitle">Podcast Index</Typography>
         <div className={styles.tiles}>
-          <div className={styles.tile}>Trending podcasts</div>
-          <div className={styles.tile}>Browse by category</div>
-          <div className={styles.tile} onClick={() => handleNavigate('search')}>
+          <div
+            className={styles.tile}
+            style={
+              theme.accentColor &&
+              !!podcast?.artwork &&
+              settings.dynamicAccentColor
+                ? { backgroundColor: theme.accentColor }
+                : {}
+            }
+          >
+            Trending podcasts
+          </div>
+          <div
+            className={styles.tile}
+            style={
+              theme.accentColor &&
+              !!podcast?.artwork &&
+              settings.dynamicAccentColor
+                ? { backgroundColor: theme.accentColor }
+                : {}
+            }
+          >
+            Browse by category
+          </div>
+          <div
+            className={styles.tile}
+            style={
+              theme.accentColor &&
+              !!podcast?.artwork &&
+              settings.dynamicAccentColor
+                ? { backgroundColor: theme.accentColor }
+                : {}
+            }
+            onClick={() => handleNavigate('search')}
+          >
             Search
           </div>
         </div>

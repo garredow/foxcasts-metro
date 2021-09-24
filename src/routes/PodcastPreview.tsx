@@ -77,7 +77,6 @@ export function PodcastPreview(props: Props) {
     <Screen
       className={styles.root}
       title={podcast?.title || 'podcast'}
-      backgroundImageUrl={podcast?.artworkUrl}
       tabs={panels}
       activePanel={panels.find((a) => a.id === panelId)?.id}
       panelPeek={false}

@@ -72,7 +72,8 @@ export function EpisodeDetail(props: Props) {
     <Screen
       className={styles.root}
       title={podcast?.title || 'podcast'}
-      backgroundImageUrl={podcast?.artworkUrl}
+      backgroundImageUrl={podcast?.artwork}
+      dynamicTheme={!!podcast?.artwork}
       tabs={panels}
       activePanel={panels.find((a) => a.id === panelId)?.id}
       panelPeek={false}

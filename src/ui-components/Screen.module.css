@@ -1,8 +1,4 @@
 .root {
-  background-size: cover;
-  background-blend-mode: darken;
-  background-color: var(--app-bg-image-cover-color);
-  background-repeat: no-repeat;
 }
 
 .content {
@@ -11,7 +7,6 @@
   flex-direction: column;
   display: flex;
   flex-direction: column;
-  backdrop-filter: blur(10px);
   overflow: hidden;
 }
 

@@ -74,6 +74,7 @@ export function Search(props: Props) {
       tabs={panels}
       activePanel={panels.find((a) => a.id === panelId)?.id}
       panelPeek={false}
+      dynamicTheme={true}
       onPanelChanged={(index) => {
         if (index === -1) {
           return;

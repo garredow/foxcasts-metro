@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { useHistory, useParams } from 'react-router';
 import { useSettings } from '../contexts/SettingsProvider';
 import { ComponentBaseProps, Settings } from '../models';

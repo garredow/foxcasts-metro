@@ -71,7 +71,8 @@ export function Player(props: Props) {
     <Screen
       className={styles.root}
       title="Player"
-      backgroundImageUrl={podcast?.artworkUrl}
+      backgroundImageUrl={podcast?.artwork}
+      dynamicTheme={!!podcast?.artwork}
       tabs={panels}
       activePanel={panels.find((a) => a.id === panelId)?.id}
       onPanelChanged={(index) => {

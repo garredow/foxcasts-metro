@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useState } from 'react';
 import { ComponentBaseProps, PodcastsLayout, Settings, Theme } from '../models';
 import { getStorageItem, setStorageItem, StorageKey } from '../utils/storage';
 

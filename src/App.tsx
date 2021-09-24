@@ -15,14 +15,17 @@ import { Search } from './routes/Search';
 import { PodcastPreview } from './routes/PodcastPreview';
 import { System } from './routes/System';
 import { themes } from './themes';
+import { ThemeProvider, useTheme } from './contexts/ThemeProvider';
 
 export function AppWrapper() {
   return (
     <div id="preact_root">
       <SettingsProvider>
-        <PlayerProvider>
-          <App />
-        </PlayerProvider>
+        <ThemeProvider>
+          <PlayerProvider>
+            <App />
+          </PlayerProvider>
+        </ThemeProvider>
       </SettingsProvider>
     </div>
   );
@@ -51,12 +54,42 @@ function AnimatedRoute({ component: Component, ...rest }: any): JSX.Element {
 }
 
 export default function App() {
+  const backgroundRef = useRef(null);
   const { settings } = useSettings();
+  const { theme } = useTheme();
 
   useEffect(() => {
     // Core.health().then((res) => console.log(res));
     // Core.checkForUpdates();
   }, []);
+
+  useEffect(() => {
+    const background = backgroundRef?.current as unknown as HTMLDivElement;
+
+    background.style.backgroundImage =
+      settings.dynamicBackground && theme.backgroundImage
+        ? `url(${theme.backgroundImage})`
+        : 'none';
+
+    background.style.backgroundColor = theme.backgroundVisible
+      ? 'var(--app-bg-image-cover-color)'
+      : 'var(--app-bg-color)';
+  }, [
+    theme.backgroundImage,
+    theme.backgroundVisible,
+    settings.dynamicBackground,
+  ]);
+
+  useEffect(() => {
+    if (settings.dynamicBackground && theme.backgroundVisible) {
+      const background = backgroundRef?.current as unknown as HTMLDivElement;
+      background.style.backgroundPositionX = `${theme.backgroundScroll * -2}px`;
+    }
+  }, [
+    theme.backgroundScroll,
+    settings.dynamicBackground,
+    theme.backgroundVisible,
+  ]);
 
   useEffect(() => {
     // Theme
@@ -75,34 +108,36 @@ export default function App() {
       '--accent-text-color',
       `#${settings.accentColor}`
     );
-  }, [settings]);
+  }, [settings.theme, settings.accentColor]);
 
   return (
-    <div className="container">
-      <Router>
-        <AnimatedRoute path="/home/:panelId" component={Home} />
-        <AnimatedRoute path="/collection/:panelId" component={Collection} />
-        <AnimatedRoute
-          path="/podcast/preview/:podexId/:panelId"
-          component={PodcastPreview}
-        />
-        <AnimatedRoute
-          exact
-          path="/podcast/:podcastId/:panelId"
-          component={PodcastDetail}
-        />
-        <AnimatedRoute
-          path="/episode/:episodeId/:panelId"
-          component={EpisodeDetail}
-        />
-        <AnimatedRoute path="/playlist/:playlist" component={Playlists} />
-        <AnimatedRoute path="/player/:panelId" component={Player} />
-        <AnimatedRoute path="/search/:panelId" component={Search} />
-        <AnimatedRoute path="/system/:panelId" component={System} />
-        <Route path="/" exact>
-          <Redirect to="/home/collection" />
-        </Route>
-      </Router>
+    <div className="background" ref={backgroundRef}>
+      <div className="container">
+        <Router>
+          <AnimatedRoute path="/home/:panelId" component={Home} />
+          <AnimatedRoute path="/collection/:panelId" component={Collection} />
+          <AnimatedRoute
+            path="/podcast/preview/:podexId/:panelId"
+            component={PodcastPreview}
+          />
+          <AnimatedRoute
+            exact
+            path="/podcast/:podcastId/:panelId"
+            component={PodcastDetail}
+          />
+          <AnimatedRoute
+            path="/episode/:episodeId/:panelId"
+            component={EpisodeDetail}
+          />
+          <AnimatedRoute path="/playlist/:playlist" component={Playlists} />
+          <AnimatedRoute path="/player/:panelId" component={Player} />
+          <AnimatedRoute path="/search/:panelId" component={Search} />
+          <AnimatedRoute path="/system/:panelId" component={System} />
+          <Route path="/" exact>
+            <Redirect to="/home/collection" />
+          </Route>
+        </Router>
+      </div>
     </div>
   );
 }
