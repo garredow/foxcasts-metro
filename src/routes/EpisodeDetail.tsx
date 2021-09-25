@@ -37,19 +37,28 @@ export function EpisodeDetail(props: Props) {
   const { setCommands } = useAppBar();
 
   useEffect(() => {
-    setCommands({
+    if (!episode) {
+      return;
+    }
+
+    const commands = {
       top: [{ id: 'play', label: 'Play', icon: 'play' }],
       bottom: [
-        {
-          id: 'resume',
-          label: `resume at ${formatTime(episode?.progress || 0)}`,
-        },
         { id: 'markPlayed', label: 'mark as played' },
         { id: 'markUnplayed', label: 'mark as unplayed' },
         { id: 'download', label: 'download' },
       ],
       callback: handleCommand,
-    });
+    };
+
+    if (episode.progress > 0) {
+      commands.bottom.unshift({
+        id: 'resume',
+        label: `resume at ${formatTime(episode.progress)}`,
+      });
+    }
+
+    setCommands(commands);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [episode]);
 
