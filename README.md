@@ -6,7 +6,7 @@
 
 ## What is it?
 
-Foxcasts Metro is a basic podcast manager app. You can subscribe and listen to all your favorite podcasts. It's powered by Podcast Index.
+Foxcasts Metro is a basic podcast manager app. You can subscribe and listen to all your favorite podcasts. It's powered by [Podcast Index](https://podcastindex.org/).
 
 ## Why did you build it?
 
