@@ -1,9 +1,11 @@
 import { EpisodeExtended } from 'foxcasts-core/lib/types';
+import { formatTime } from 'foxcasts-core/lib/utils';
 import { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router';
 import { ComponentBaseProps } from '../models';
 import { Core } from '../services/core';
 import { ListItem } from '../ui-components/ListItem';
+import { Loading } from '../ui-components/Loading';
 import { Panel } from '../ui-components/Panel';
 import { Screen } from '../ui-components/Screen';
 import styles from './Collection.module.css';
@@ -57,6 +59,7 @@ export function Playlists(props: Props) {
       }}
     >
       <Panel>
+        {recent === null && <Loading />}
         {recent?.map((episode) => (
           <ListItem
             key={episode.id}
@@ -69,23 +72,28 @@ export function Playlists(props: Props) {
         {recent?.length === 0 ? <p>No episodes</p> : null}
       </Panel>
       <Panel>
+        {inProgress === null && <Loading />}
         {inProgress?.map((episode) => (
           <ListItem
             key={episode.id}
             primaryText={episode.title}
             secondaryText={episode.podcastTitle}
-            onClick={() => navTo(`/episode/${episode.id}`)}
+            accentText={`${formatTime(episode.progress)} of ${formatTime(
+              episode.duration
+            )} played`}
+            onClick={() => navTo(`/episode/${episode.id}/info`)}
           />
         ))}
         {inProgress?.length === 0 ? <p>No episodes</p> : null}
       </Panel>
       <Panel>
+        {favorites === null && <Loading />}
         {favorites?.map((episode) => (
           <ListItem
             key={episode.id}
             primaryText={episode.title}
             secondaryText={episode.podcastTitle}
-            onClick={() => navTo(`/episode/${episode.id}`)}
+            onClick={() => navTo(`/episode/${episode.id}/info`)}
           />
         ))}
         {favorites?.length === 0 ? <p>No episodes</p> : null}
