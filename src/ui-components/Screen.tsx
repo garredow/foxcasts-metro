@@ -73,7 +73,6 @@ export function Screen({
   }, [props.backgroundImageUrl]);
 
   useEffect(() => {
-    setBackgroundVisible(dynamicTheme);
     const root = rootRef.current as unknown as HTMLDivElement;
 
     if (!settings.dynamicAccentColor || !dynamicTheme) {
@@ -88,6 +87,10 @@ export function Screen({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [theme.accentColor, settings.dynamicAccentColor, dynamicTheme]);
+
+  useEffect(() => {
+    setBackgroundVisible(dynamicTheme);
+  }, [dynamicTheme, setBackgroundVisible]);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const scrollingDone = useCallback<any>(
