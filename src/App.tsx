@@ -18,6 +18,7 @@ import { themes } from './themes';
 import { ThemeProvider, useTheme } from './contexts/ThemeProvider';
 import { AppBar } from './ui-components/AppBar';
 import { AppBarProvider } from './contexts/AppBarProvider';
+import { Trending } from './routes/Trending';
 
 export function AppWrapper() {
   return (
@@ -64,7 +65,7 @@ export default function App() {
 
   useEffect(() => {
     // Core.health().then((res) => console.log(res));
-    // Core.checkForUpdates();
+    // Core.checkForUpdates().then((res) => console.log('updates', res));
   }, []);
 
   useEffect(() => {
@@ -120,6 +121,7 @@ export default function App() {
         <Router>
           <AnimatedRoute path="/home/:panelId" component={Home} />
           <AnimatedRoute path="/collection/:panelId" component={Collection} />
+          <AnimatedRoute path="/trending/:categoryId" component={Trending} />
           <AnimatedRoute
             path="/podcast/preview/:podexId/:panelId"
             component={PodcastPreview}

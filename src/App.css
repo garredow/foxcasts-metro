@@ -13,6 +13,7 @@
   perspective: 1000px;
   height: 100vh;
   backdrop-filter: blur(10px);
+  overflow: hidden;
 }
 
 .page {

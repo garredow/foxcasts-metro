@@ -80,6 +80,9 @@ export default function Home(props: Props) {
       case 'categories':
         history.push(`/collection/${screen}`);
         break;
+      case 'trending':
+        history.push(`/trending/all`);
+        break;
       case 'search':
         history.push(`/search/search`);
         break;
@@ -168,6 +171,7 @@ export default function Home(props: Props) {
                 ? { backgroundColor: theme.accentColor }
                 : {}
             }
+            onClick={() => handleNavigate('trending')}
           >
             Trending podcasts
           </div>
