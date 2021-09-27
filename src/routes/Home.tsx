@@ -83,6 +83,9 @@ export default function Home(props: Props) {
       case 'trending':
         history.push(`/trending`);
         break;
+      case 'trendingCategories':
+        history.push(`/categories`);
+        break;
       case 'search':
         history.push(`/search/results`);
         break;
@@ -184,6 +187,7 @@ export default function Home(props: Props) {
                 ? { backgroundColor: theme.accentColor }
                 : {}
             }
+            onClick={() => handleNavigate('trendingCategories')}
           >
             Browse by category
           </div>

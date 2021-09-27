@@ -20,6 +20,7 @@ import { AppBar } from './ui-components/AppBar';
 import { AppBarProvider } from './contexts/AppBarProvider';
 import { Trending } from './routes/Trending';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import { Categories } from './routes/Categories';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -134,6 +135,7 @@ export default function App() {
           <AnimatedRoute path="/home/:panelId" component={Home} />
           <AnimatedRoute path="/collection/:panelId" component={Collection} />
           <AnimatedRoute path="/trending" component={Trending} />
+          <AnimatedRoute path="/categories" component={Categories} />
           <AnimatedRoute
             path="/podcast/preview/:podexId/:panelId"
             component={PodcastPreview}
