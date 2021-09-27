@@ -1,7 +1,10 @@
+import { useQuery } from 'react-query';
 import { useHistory, useParams } from 'react-router';
 import { useSettings } from '../contexts/SettingsProvider';
 import { ComponentBaseProps, Settings } from '../models';
-import { ListItem } from '../ui-components/ListItem';
+import { Core } from '../services/core';
+import { Link } from '../ui-components/Link';
+import { Loading } from '../ui-components/Loading';
 import { Panel } from '../ui-components/Panel';
 import { Screen } from '../ui-components/Screen';
 import { Select } from '../ui-components/Select';
@@ -25,6 +28,14 @@ export function System(props: Props) {
   const history = useHistory();
   const { panelId } = useParams<Params>();
   const { settings, setSettings } = useSettings();
+  const { data: stats, isLoading: statsLoading } = useQuery(
+    'pistats',
+    () => Core.fetchPIStats(),
+    {
+      enabled: panelId === 'about',
+      keepPreviousData: true,
+    }
+  );
 
   function saveSetting(key: keyof Settings, value: any): void {
     setSettings({
@@ -120,7 +131,31 @@ export function System(props: Props) {
         />
       </Panel>
       <Panel paddingRight={true}>
-        <ListItem primaryText="about" />
+        <Typography type="title">Foxcasts Metro</Typography>
+        <Typography type="bodyLarge">
+          This app was built for fun by{' '}
+          <Link url="https://garrettdowns.com">Garrett Downs</Link>. React was
+          used for the UI, the fantastic{' '}
+          <Link url="https://podcastindex.org/">Podcast Index</Link> as the data
+          source, and hosted on{' '}
+          <Link url="https://app.netlify.com/sites/garredow-foxcasts-metro/deploys">
+            Netlify
+          </Link>
+          . If you'd like to check out the source code, it's available on{' '}
+          <Link url="https://github.com/garredow/foxcasts-metro">Github</Link>.
+        </Typography>
+        <Typography type="title">Podcast Index Stats</Typography>
+        {statsLoading && <Loading />}
+        {stats ? (
+          <>
+            <Typography type="bodyLarge">
+              Total Feeds: {stats?.feedCountTotal.toLocaleString()}
+            </Typography>
+            <Typography type="bodyLarge">
+              Total Episodes: {stats?.episodeCountTotal.toLocaleString()}
+            </Typography>
+          </>
+        ) : null}
       </Panel>
     </Screen>
   );
