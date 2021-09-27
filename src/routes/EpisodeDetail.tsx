@@ -1,7 +1,7 @@
 import { Chapter, EpisodeExtended, Podcast } from 'foxcasts-core/lib/types';
 import { formatFileSize, formatTime } from 'foxcasts-core/lib/utils';
 import { useEffect, useState } from 'react';
-import { useHistory, useParams } from 'react-router';
+import { useParams } from 'react-router';
 import { useAppBar } from '../contexts/AppBarProvider';
 import { usePlayer } from '../contexts/PlayerProvider';
 import { ComponentBaseProps } from '../models';
