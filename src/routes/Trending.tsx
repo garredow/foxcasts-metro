@@ -16,6 +16,8 @@ type QueryParams = {
 
 type Props = ComponentBaseProps;
 
+const panels = [{ id: 'trending', label: 'trending' }];
+
 export function Trending(props: Props) {
   const history = useHistory();
   const { categoryId } = useQueryParams<QueryParams>();
@@ -30,8 +32,14 @@ export function Trending(props: Props) {
   );
 
   return (
-    <Screen className={styles.root} title="Trending Podcasts" panelPeek={false}>
-      <Panel paddingRight={true}>
+    <Screen
+      className={styles.root}
+      title="Trending Podcasts"
+      panelPeek={false}
+      panels={panels}
+      showTabs={false}
+    >
+      <Panel paddingRight={true} panelId={panels[0].id}>
         {isLoading && <Loading />}
         {podcasts?.map((podcast) => (
           <ListItem

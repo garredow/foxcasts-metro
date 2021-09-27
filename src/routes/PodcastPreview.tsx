@@ -2,7 +2,6 @@ import { ApiEpisode, ApiPodcast } from 'foxcasts-core/lib/types';
 import { NotFoundError } from 'foxcasts-core/lib/utils';
 import { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
-import { useHistory } from 'react-router';
 import { useAppBar } from '../contexts/AppBarProvider';
 import { useRouteParams } from '../hooks/useRouteParams';
 import { ComponentBaseProps } from '../models';
@@ -28,7 +27,6 @@ const panels = [
 ];
 
 export function PodcastPreview(props: Props) {
-  const history = useHistory();
   const { podexId, panelId } = useRouteParams<Params>();
 
   const { data: podcast, isLoading: podcastLoading } =
@@ -104,18 +102,12 @@ export function PodcastPreview(props: Props) {
     <Screen
       className={styles.root}
       title={podcast?.title || 'podcast'}
-      tabs={panels}
+      panels={panels}
       activePanel={panels.find((a) => a.id === panelId)?.id}
       panelPeek={false}
       disableAppBar={false}
-      onPanelChanged={(index) => {
-        if (index === -1) {
-          return;
-        }
-        history.replace(`/podcast/preview/${podexId}/${panels[index].id}`);
-      }}
     >
-      <Panel className={styles.panel}>
+      <Panel className={styles.panel} panelId={panels[0].id}>
         {podcastLoading && <Loading />}
         <div className={styles.container}>
           <img className={styles.artwork} src={podcast?.artworkUrl} alt="" />
@@ -137,7 +129,7 @@ export function PodcastPreview(props: Props) {
           <ListItem key={category} primaryText={category} />
         ))}
       </Panel>
-      <Panel>
+      <Panel panelId={panels[1].id}>
         {episodesLoading && <Loading />}
         {episodes?.map((episode) => (
           <ListItem

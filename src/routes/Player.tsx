@@ -1,7 +1,7 @@
 import { Chapter, Podcast } from 'foxcasts-core/lib/types';
 import { formatFileSize, formatTime } from 'foxcasts-core/lib/utils';
 import { useEffect, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { PlaybackStatus, usePlayer } from '../contexts/PlayerProvider';
 import { ComponentBaseProps } from '../models';
 import { Core } from '../services/core';
@@ -36,7 +36,6 @@ export function Player(props: Props) {
     duration: 0,
   });
   const [chapters, setChapters] = useState<Chapter[] | null>(null);
-  const history = useHistory();
   const { panelId } = useParams<Params>();
 
   const { episode, ...player } = usePlayer();
@@ -73,16 +72,10 @@ export function Player(props: Props) {
       title="Player"
       backgroundImageUrl={podcast?.artwork}
       dynamicTheme={!!podcast?.artwork}
-      tabs={panels}
+      panels={panels}
       activePanel={panels.find((a) => a.id === panelId)?.id}
-      onPanelChanged={(index) => {
-        if (index === -1) {
-          return;
-        }
-        history.replace(`/player/${panels[index].id}`);
-      }}
     >
-      <Panel paddingRight={true}>
+      <Panel paddingRight={true} panelId={panels[0].id}>
         {episode ? (
           <>
             {podcast ? (
@@ -124,7 +117,7 @@ export function Player(props: Props) {
           <Typography>Nothing is playing</Typography>
         )}
       </Panel>
-      <Panel>
+      <Panel panelId={panels[1].id}>
         {chapters?.map((chapter) => {
           let times = formatTime(chapter.startTime / 1000);
           if (chapter.endTime) {
@@ -145,7 +138,7 @@ export function Player(props: Props) {
           <Typography>This episode does not have chapters.</Typography>
         ) : null}
       </Panel>
-      <Panel>
+      <Panel panelId={panels[2].id}>
         {episode ? (
           <>
             <Typography>{episode?.description}</Typography>

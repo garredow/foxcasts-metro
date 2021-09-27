@@ -46,17 +46,11 @@ export function PodcastDetail(props: Props) {
       title={podcast?.title || 'podcast'}
       backgroundImageUrl={podcast?.artwork}
       dynamicTheme={!!podcast?.artwork}
-      tabs={panels}
+      panels={panels}
       activePanel={panels.find((a) => a.id === panelId)?.id}
       panelPeek={false}
-      onPanelChanged={(index) => {
-        if (index === -1) {
-          return;
-        }
-        history.replace(`/podcast/${podcastId}/${panels[index].id}`);
-      }}
     >
-      <Panel className={styles.panel}>
+      <Panel className={styles.panel} panelId={panels[0].id}>
         <div className={styles.container}>
           <img className={styles.artwork} src={podcast?.artworkUrl} alt="" />
           <Typography type="subtitle">by {podcast?.author}</Typography>
@@ -78,7 +72,7 @@ export function PodcastDetail(props: Props) {
           <ListItem key={category} primaryText={category} />
         ))}
       </Panel>
-      <Panel>
+      <Panel panelId={panels[1].id}>
         {episodes.map((episode) => (
           <ListItem
             key={episode.id}

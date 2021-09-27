@@ -27,7 +27,6 @@ const panels = [
 ];
 
 export function EpisodeDetail(props: Props) {
-  const history = useHistory();
   const { episodeId, panelId } = useParams<Params>();
   const [podcast, setPodcast] = useState<Podcast>();
   const [episode, setEpisode] = useState<EpisodeExtended>();
@@ -102,17 +101,11 @@ export function EpisodeDetail(props: Props) {
       backgroundImageUrl={podcast?.artwork}
       dynamicTheme={!!podcast?.artwork}
       disableAppBar={false}
-      tabs={panels}
+      panels={panels}
       activePanel={panels.find((a) => a.id === panelId)?.id}
       panelPeek={false}
-      onPanelChanged={(index) => {
-        if (index === -1) {
-          return;
-        }
-        history.replace(`/episode/${episodeId}/${panels[index].id}`);
-      }}
     >
-      <Panel paddingRight={true}>
+      <Panel paddingRight={true} panelId={panels[0].id}>
         <Typography type="title">{episode?.title}</Typography>
         <Typography type="subtitle">Description</Typography>
         <Typography type="body">{episode?.description}</Typography>
@@ -129,7 +122,7 @@ export function EpisodeDetail(props: Props) {
           {formatFileSize(episode?.fileSize || 0)}
         </Typography>
       </Panel>
-      <Panel>
+      <Panel panelId={panels[1].id}>
         {chapters?.map((chapter) => {
           let times = formatTime(chapter.startTime / 1000);
           if (chapter.endTime) {

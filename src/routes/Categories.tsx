@@ -12,6 +12,8 @@ import styles from './Categories.module.css';
 
 type Props = ComponentBaseProps;
 
+const panels = [{ id: 'categories', label: 'categories' }];
+
 export function Categories(props: Props) {
   const { data: categories, isLoading } = useQuery<Category[]>(
     'categories',
@@ -20,8 +22,14 @@ export function Categories(props: Props) {
   const history = useHistory();
 
   return (
-    <Screen className={styles.root} title="Categories" panelPeek={false}>
-      <Panel paddingRight={true}>
+    <Screen
+      className={styles.root}
+      title="Categories"
+      panelPeek={false}
+      showTabs={false}
+      panels={panels}
+    >
+      <Panel paddingRight={true} panelId={panels[0].id}>
         {isLoading && <Loading />}
         {categories?.map((category) => (
           <ListItem

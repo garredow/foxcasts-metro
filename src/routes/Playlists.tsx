@@ -49,16 +49,10 @@ export function Playlists(props: Props) {
     <Screen
       className={styles.root}
       title="Playlists"
-      tabs={panels}
+      panels={panels}
       activePanel={panels.find((a) => a.id === playlist)?.id}
-      onPanelChanged={(index) => {
-        if (index === -1) {
-          return;
-        }
-        history.replace(`/playlist/${panels[index].id}`);
-      }}
     >
-      <Panel>
+      <Panel panelId={panels[0].id}>
         {recent === null && <Loading />}
         {recent?.map((episode) => (
           <ListItem
@@ -71,7 +65,7 @@ export function Playlists(props: Props) {
         ))}
         {recent?.length === 0 ? <p>No episodes</p> : null}
       </Panel>
-      <Panel>
+      <Panel panelId={panels[1].id}>
         {inProgress === null && <Loading />}
         {inProgress?.map((episode) => (
           <ListItem
@@ -86,7 +80,7 @@ export function Playlists(props: Props) {
         ))}
         {inProgress?.length === 0 ? <p>No episodes</p> : null}
       </Panel>
-      <Panel>
+      <Panel panelId={panels[2].id}>
         {favorites === null && <Loading />}
         {favorites?.map((episode) => (
           <ListItem

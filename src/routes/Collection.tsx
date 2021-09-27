@@ -563,19 +563,19 @@ export function Collection(props: Props) {
   return (
     <Screen
       title="Collection"
-      tabs={panels}
+      panels={panels}
       activePanel={panels.find((a) => a.id === panelId)?.id}
-      onPanelChanged={(index) =>
-        index >= 0 && history.replace(`/collection/${panels[index].id}`)
-      }
     >
-      <Panel paddingRight={settings.podcastsLayout === PodcastsLayout.Grid}>
+      <Panel
+        paddingRight={settings.podcastsLayout === PodcastsLayout.Grid}
+        panelId={panels[0].id}
+      >
         {renderPodcasts()}
       </Panel>
-      <Panel>
+      <Panel panelId={panels[1].id}>
         <ListItem primaryText="episodes" />
       </Panel>
-      <Panel>
+      <Panel panelId={panels[2].id}>
         <ListItem
           primaryText="most recent"
           onClick={() => navTo('/playlist/recent')}
@@ -589,7 +589,7 @@ export function Collection(props: Props) {
           onClick={() => navTo('/playlist/favorites')}
         />
       </Panel>
-      <Panel>
+      <Panel panelId={panels[3].id}>
         {categories.map((category) => (
           <ListItem key={category.id} primaryText={category.name} />
         ))}

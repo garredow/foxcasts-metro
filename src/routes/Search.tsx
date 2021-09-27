@@ -56,7 +56,7 @@ export function Search(props: Props) {
         bottom: [],
         callback: clearRecents,
       });
-    } else {
+    } else if (panelId === 'results') {
       setCommands(null);
     }
   }, [panelId, setCommands]);
@@ -87,19 +87,13 @@ export function Search(props: Props) {
     <Screen
       className={styles.root}
       title="Search"
-      tabs={panels}
+      panels={panels}
       activePanel={panels.find((a) => a.id === panelId)?.id}
       panelPeek={false}
       dynamicTheme={true}
       disableAppBar={false}
-      onPanelChanged={(index) => {
-        if (index === -1) {
-          return;
-        }
-        history.replace(`/search/${panels[index].id}${q ? `?q=${q}` : ''}`);
-      }}
     >
-      <Panel paddingRight={true}>
+      <Panel paddingRight={true} panelId={panels[0].id}>
         <Input value={query} onChange={setQuery} onEnter={search} />
         {isLoading && <Loading />}
         {results?.map((result) => (
@@ -114,7 +108,7 @@ export function Search(props: Props) {
           />
         ))}
       </Panel>
-      <Panel>
+      <Panel panelId={panels[1].id}>
         {searches.map((searchTerm) => (
           <ListItem
             key={searchTerm}

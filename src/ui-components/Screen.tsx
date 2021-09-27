@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import { useCallback, useEffect, useRef } from 'react';
+import { useHistory, useLocation } from 'react-router';
 import { useAppBar } from '../contexts/AppBarProvider';
 import { useSettings } from '../contexts/SettingsProvider';
 import { useTheme } from '../contexts/ThemeProvider';
@@ -7,7 +8,7 @@ import { ComponentBaseProps } from '../models';
 import { ifClass, joinClasses } from '../utils/classes';
 import styles from './Screen.module.css';
 
-type Tab = {
+type PanelConfig = {
   id: string;
   label: string;
 };
@@ -19,23 +20,29 @@ type Props = ComponentBaseProps & {
   backgroundImageUrl?: string;
   dynamicTheme?: boolean;
   disableAppBar?: boolean;
+  showTabs?: boolean;
   activePanel?: string;
   headerRef?: any;
-  tabs?: Tab[];
+  panels: PanelConfig[];
   onScroll?: (progress: number) => void;
-  onPanelChanged?: (index: number) => void;
+  onPanelChanged?: (panelId: string) => void;
 };
 
 export function Screen({
   panelPeek = false,
   dynamicTheme = false,
   disableAppBar = true,
+  showTabs = true,
   ...props
 }: Props) {
   const rootRef = useRef(null);
   const heroTextRef = useRef(null);
   const tabsRef = useRef(null);
   const panelsRef = useRef(null);
+
+  const history = useHistory();
+  const location = useLocation();
+  // console.log('loc', location);
 
   const { settings } = useSettings();
   const {
@@ -54,12 +61,11 @@ export function Screen({
 
   useEffect(() => {
     const panels = panelsRef.current as unknown as HTMLDivElement;
-    let panelIndex = props.tabs?.findIndex((a) => a.id === props.activePanel);
-    if (panelIndex === undefined || panelIndex === null) {
-      panelIndex = -1;
-    }
+    let panelIndex = Array.from(panels.children).findIndex(
+      (a: any) => a.dataset.panelId === props.activePanel
+    );
 
-    if (panels && props.activePanel && panelIndex >= 0) {
+    if (panelIndex >= 0) {
       panels.scrollLeft = panels.clientWidth * panelIndex;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -96,13 +102,18 @@ export function Screen({
   const scrollingDone = useCallback<any>(
     _.debounce((ev: any) => {
       const panels = ev.target as HTMLDivElement;
-      const index = Array.from(panels.children).findIndex((a: any, i) => {
+      const panel: any = Array.from(panels.children).find((a: any) => {
         return Math.round(a.offsetLeft) === panels.scrollLeft;
       });
 
-      props.onPanelChanged?.(index);
+      const panelId = panel?.dataset?.panelId;
+      if (!panelId) return;
+
+      props.onPanelChanged
+        ? props.onPanelChanged(panelId)
+        : history.replace(`${panelId}${location.search}`);
     }, 200),
-    [props.onPanelChanged]
+    [props.onPanelChanged, panelPeek, location.search]
   );
 
   function handleScroll(ev: any) {
@@ -146,9 +157,9 @@ export function Screen({
           </div>
         ) : null}
         {props.title ? <div className={styles.title}>{props.title}</div> : null}
-        {props.tabs ? (
+        {showTabs && props.panels ? (
           <div className={styles.tabs} ref={tabsRef}>
-            {props.tabs.map((tab) => (
+            {props.panels.map((tab) => (
               <div
                 key={tab.id}
                 className={ifClass(tab.id === props.activePanel, styles.active)}

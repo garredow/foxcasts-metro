@@ -101,21 +101,14 @@ export default function Home(props: Props) {
     <Screen
       heroText="foxcasts metro"
       panelPeek={true}
+      panels={panels}
+      showTabs={false}
       backgroundImageUrl={podcast?.artwork}
       dynamicTheme={!!podcast?.artwork}
       activePanel={panels.find((a) => a.id === panelId)?.id}
-      onPanelChanged={(index) => {
-        if (index === -1) {
-          return;
-        }
-        if (!player.episode) {
-          index++;
-        }
-        history.replace(`/home/${panels[index].id}`);
-      }}
     >
       {player.episode ? (
-        <Panel headerText="now playing">
+        <Panel headerText="now playing" panelId={panels[0].id}>
           <img src={player.episode.cover} alt="" />
           <Typography type="subtitle">{player.episode.title}</Typography>
           <Typography type="bodyLarge" color="accent">
@@ -140,7 +133,7 @@ export default function Home(props: Props) {
           </div>
         </Panel>
       ) : null}
-      <Panel headerText="collection">
+      <Panel headerText="collection" panelId={panels[1].id}>
         <ListItem
           primaryText="podcasts"
           onClick={() => handleNavigate('podcasts')}
@@ -162,7 +155,7 @@ export default function Home(props: Props) {
           onClick={() => handleNavigate('player')}
         />
       </Panel>
-      <Panel headerText="get podcasts">
+      <Panel headerText="get podcasts" panelId={panels[2].id}>
         <Typography type="subtitle">Podcast Index</Typography>
         <div className={styles.tiles}>
           <div
@@ -206,7 +199,7 @@ export default function Home(props: Props) {
           </div>
         </div>
       </Panel>
-      <Panel headerText="system">
+      <Panel headerText="system" panelId={panels[3].id}>
         <ListItem
           primaryText="settings"
           onClick={() => handleNavigate('settings')}

@@ -1,5 +1,5 @@
 import { useQuery } from 'react-query';
-import { useHistory, useParams } from 'react-router';
+import { useParams } from 'react-router';
 import { useSettings } from '../contexts/SettingsProvider';
 import { ComponentBaseProps, Settings } from '../models';
 import { Core } from '../services/core';
@@ -25,7 +25,6 @@ const panels = [
 ];
 
 export function System(props: Props) {
-  const history = useHistory();
   const { panelId } = useParams<Params>();
   const { settings, setSettings } = useSettings();
   const { data: stats, isLoading: statsLoading } = useQuery(
@@ -48,17 +47,11 @@ export function System(props: Props) {
     <Screen
       className={styles.root}
       title="System"
-      tabs={panels}
+      panels={panels}
       activePanel={panels.find((a) => a.id === panelId)?.id}
       panelPeek={false}
-      onPanelChanged={(index) => {
-        if (index === -1) {
-          return;
-        }
-        history.replace(`/system/${panels[index].id}`);
-      }}
     >
-      <Panel paddingRight={true}>
+      <Panel paddingRight={true} panelId={panels[0].id}>
         <Select
           label="Podcasts Layout"
           value={settings.podcastsLayout}
@@ -69,7 +62,7 @@ export function System(props: Props) {
           onChange={(val) => saveSetting('podcastsLayout', val)}
         />
       </Panel>
-      <Panel paddingRight={true}>
+      <Panel paddingRight={true} panelId={panels[1].id}>
         <Typography type="bodyLarge">
           Change your phone's background and{' '}
           <span className={styles.accentText}>accent color</span> to match your
@@ -130,7 +123,7 @@ export function System(props: Props) {
           }
         />
       </Panel>
-      <Panel paddingRight={true}>
+      <Panel paddingRight={true} panelId={panels[2].id}>
         <Typography type="title">Foxcasts Metro</Typography>
         <Typography type="bodyLarge">
           This app was built for fun by{' '}
