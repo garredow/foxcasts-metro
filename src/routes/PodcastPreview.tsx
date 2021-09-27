@@ -1,18 +1,21 @@
 import { ApiEpisode, ApiPodcast } from 'foxcasts-core/lib/types';
 import { NotFoundError } from 'foxcasts-core/lib/utils';
 import { useEffect, useState } from 'react';
-import { useHistory, useParams } from 'react-router';
+import { useQuery } from 'react-query';
+import { useHistory } from 'react-router';
 import { useAppBar } from '../contexts/AppBarProvider';
+import { useRouteParams } from '../hooks/useRouteParams';
 import { ComponentBaseProps } from '../models';
 import { Core } from '../services/core';
 import { ListItem } from '../ui-components/ListItem';
+import { Loading } from '../ui-components/Loading';
 import { Panel } from '../ui-components/Panel';
 import { Screen } from '../ui-components/Screen';
 import { Typography } from '../ui-components/Typography';
 import styles from './PodcastPreview.module.css';
 
 type Params = {
-  podexId: string;
+  podexId: number;
   panelId: string;
 };
 type Props = ComponentBaseProps & {
@@ -26,20 +29,28 @@ const panels = [
 
 export function PodcastPreview(props: Props) {
   const history = useHistory();
-  const { podexId, panelId } = useParams<Params>();
-  const [podcast, setPodcast] = useState<ApiPodcast | null>(null);
-  const [episodes, setEpisodes] = useState<ApiEpisode[] | null>(null);
+  const { podexId, panelId } = useRouteParams<Params>();
+
+  const { data: podcast, isLoading: podcastLoading } =
+    useQuery<ApiPodcast | null>(
+      ['podcast', podexId],
+      () => Core.fetchPodcast(podexId),
+      { enabled: podexId !== undefined, keepPreviousData: true }
+    );
+  const { data: episodes, isLoading: episodesLoading } = useQuery<
+    ApiEpisode[] | null
+  >(['episodes', podexId], () => Core.fetchEpisodes(podexId), {
+    enabled: podexId !== undefined,
+    keepPreviousData: true,
+  });
+
   const [subscribed, setSubscribed] = useState(false);
   const [subscribing, setSubscribing] = useState(false);
 
   const { setCommands } = useAppBar();
 
   useEffect(() => {
-    const podId = parseInt(podexId, 10);
-    Core.fetchPodcast(podId).then(setPodcast);
-    Core.fetchEpisodes(podId).then(setEpisodes);
-
-    Core.getPodcastByPodexId(parseInt(podexId, 10))
+    Core.getPodcastByPodexId(podexId)
       .then(() => setSubscribed(true))
       .catch((err) => {
         if (err instanceof NotFoundError) setSubscribed(false);
@@ -70,7 +81,7 @@ export function PodcastPreview(props: Props) {
     switch (command) {
       case 'subscribe':
         setSubscribing(true);
-        await Core.subscribeByPodexId(parseInt(podexId, 10))
+        await Core.subscribeByPodexId(podexId)
           .then(() => setSubscribed(true))
           .catch((err) =>
             console.error('Failed to subscribe to podcast', err.message)
@@ -78,7 +89,7 @@ export function PodcastPreview(props: Props) {
         break;
       case 'unsubscribe':
         setSubscribing(true);
-        await Core.unsubscribeByPodexId(parseInt(podexId, 10))
+        await Core.unsubscribeByPodexId(podexId)
           .then(() => setSubscribed(false))
           .catch((err) =>
             console.error('Failed to unsubscribe from podcast', err.message)
@@ -105,6 +116,7 @@ export function PodcastPreview(props: Props) {
       }}
     >
       <Panel className={styles.panel}>
+        {podcastLoading && <Loading />}
         <div className={styles.container}>
           <img className={styles.artwork} src={podcast?.artworkUrl} alt="" />
           <Typography type="subtitle">by {podcast?.author}</Typography>
@@ -126,6 +138,7 @@ export function PodcastPreview(props: Props) {
         ))}
       </Panel>
       <Panel>
+        {episodesLoading && <Loading />}
         {episodes?.map((episode) => (
           <ListItem
             key={episode.podexId}

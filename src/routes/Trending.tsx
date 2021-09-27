@@ -1,7 +1,7 @@
 import { ApiPodcast } from 'foxcasts-core/lib/types';
-import { useEffect, useState } from 'react';
+import { useQuery } from 'react-query';
 import { useHistory } from 'react-router';
-import { useParams } from 'react-router-dom';
+import { useQueryParams } from '../hooks/useQueryParams';
 import { ComponentBaseProps } from '../models';
 import { Core } from '../services/core';
 import { ListItem } from '../ui-components/ListItem';
@@ -10,32 +10,29 @@ import { Panel } from '../ui-components/Panel';
 import { Screen } from '../ui-components/Screen';
 import styles from './Trending.module.css';
 
-type Params = {
-  categoryId: string;
+type QueryParams = {
+  categoryId?: number;
 };
 
 type Props = ComponentBaseProps;
 
 export function Trending(props: Props) {
-  const [podcasts, setPodcasts] = useState<ApiPodcast[] | null>(null);
-
   const history = useHistory();
-  const { categoryId } = useParams<Params>();
+  const { categoryId } = useQueryParams<QueryParams>();
 
-  useEffect(() => {
-    const catId = parseInt(categoryId, 10);
-    if (categoryId !== 'all' && isNaN(catId)) {
-      return;
-    }
-    Core.fetchTrendingPodcasts(-31536000, catId ? [catId] : undefined).then(
-      (res) => setPodcasts(res.slice(0, 25))
-    );
-  }, [categoryId]);
+  const { data: podcasts, isLoading } = useQuery<ApiPodcast[]>(
+    ['trending', categoryId],
+    () =>
+      Core.fetchTrendingPodcasts(
+        -31536000,
+        categoryId ? [categoryId] : undefined
+      )
+  );
 
   return (
     <Screen className={styles.root} title="Trending Podcasts" panelPeek={false}>
       <Panel paddingRight={true}>
-        {podcasts === null && <Loading />}
+        {isLoading && <Loading />}
         {podcasts?.map((podcast) => (
           <ListItem
             key={podcast.podexId}

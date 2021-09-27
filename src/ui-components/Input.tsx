@@ -8,7 +8,7 @@ type Props = ComponentBaseProps & {
   disabled?: boolean;
   value?: string;
   onChange?: (newVal: string) => void;
-  onEnter?: () => void;
+  onEnter?: (newVal: string) => void;
 };
 
 export function Input({
@@ -22,7 +22,10 @@ export function Input({
       className={joinClasses(styles.root, ifClass(fullWidth, styles.fullWidth))}
       type={type}
       disabled={disabled}
-      onKeyDown={(ev) => ev.key === 'Enter' && props.onEnter?.()}
+      onKeyDown={(ev) =>
+        ev.key === 'Enter' &&
+        props.onEnter?.((ev.target as HTMLInputElement).value)
+      }
       onChange={(ev) => props.onChange?.(ev.target.value)}
       value={props.value}
     />

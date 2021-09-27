@@ -1,12 +1,14 @@
 import { SearchResult } from 'foxcasts-core/lib/types';
 import { useEffect, useState } from 'react';
+import { useQuery } from 'react-query';
 import { useHistory, useParams } from 'react-router';
 import { useAppBar } from '../contexts/AppBarProvider';
-import { useQuery } from '../hooks/useQuery';
+import { useQueryParams } from '../hooks/useQueryParams';
 import { ComponentBaseProps } from '../models';
 import { Core } from '../services/core';
 import { Input } from '../ui-components/Input';
 import { ListItem } from '../ui-components/ListItem';
+import { Loading } from '../ui-components/Loading';
 import { Panel } from '../ui-components/Panel';
 import { Screen } from '../ui-components/Screen';
 import { Typography } from '../ui-components/Typography';
@@ -16,34 +18,36 @@ import styles from './Search.module.css';
 type Params = {
   panelId: string;
 };
-type Props = ComponentBaseProps & {
-  headerText?: string;
+type QueryParams = {
+  q: string;
 };
+type Props = ComponentBaseProps;
 
 const panels = [
-  { id: 'search', label: 'search' },
+  { id: 'results', label: 'results' },
   { id: 'recent', label: 'recent searches' },
 ];
 
 export function Search(props: Props) {
   const [query, setQuery] = useState<string>('');
-  const [results, setResults] = useState<SearchResult[] | null>(null);
   const [searches, setSearches] = useState<string[]>([]);
   const history = useHistory();
   const { panelId } = useParams<Params>();
-  const queryParams = useQuery();
+  const { q } = useQueryParams<QueryParams>();
+  const { data: results, isLoading } = useQuery<SearchResult[]>(
+    ['search', q],
+    () => Core.searchPodcasts(q),
+    { enabled: q !== undefined, keepPreviousData: true }
+  );
+
   const { setCommands } = useAppBar();
 
   useEffect(() => {
     setSearches(getStorageItem(StorageKey.RecentSearches) || []);
-
-    const initialQuery = queryParams.get('q');
-    if (initialQuery) {
-      setQuery(initialQuery);
-      search(initialQuery);
-    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => setQuery(q || ''), [q]);
 
   useEffect(() => {
     if (panelId === 'recent') {
@@ -57,21 +61,21 @@ export function Search(props: Props) {
     }
   }, [panelId, setCommands]);
 
-  function search(q: string, updateHistory = false) {
-    history.replace(`/search/search?q=${q}`);
-    Core.searchPodcasts(q).then(setResults);
-
-    if (updateHistory) {
-      const newSearches = [
-        q,
-        ...searches.filter((a) => a.toLowerCase() !== q.toLowerCase()),
-      ];
-      if (newSearches.length > 10) {
-        newSearches.length = 10;
-      }
-      setStorageItem<string[]>(StorageKey.RecentSearches, newSearches);
-      setSearches(newSearches);
+  function search(term: string) {
+    if (!term) {
+      history.replace(`/search/${panelId}`);
+      return;
     }
+
+    const newSearches = [
+      term,
+      ...searches.filter((a) => a.toLowerCase() !== term.toLowerCase()),
+    ].slice(0, 10);
+
+    setSearches(newSearches);
+    setStorageItem<string[]>(StorageKey.RecentSearches, newSearches);
+
+    history.replace(`/search/results?q=${term}`);
   }
 
   function clearRecents() {
@@ -92,17 +96,12 @@ export function Search(props: Props) {
         if (index === -1) {
           return;
         }
-        history.replace(
-          `/search/${panels[index].id}${query ? `?q=${query}` : ''}`
-        );
+        history.replace(`/search/${panels[index].id}${q ? `?q=${q}` : ''}`);
       }}
     >
       <Panel paddingRight={true}>
-        <Input
-          value={query}
-          onChange={(val) => setQuery(val)}
-          onEnter={() => search(query, true)}
-        />
+        <Input value={query} onChange={setQuery} onEnter={search} />
+        {isLoading && <Loading />}
         {results?.map((result) => (
           <ListItem
             key={result.podexId}
@@ -116,14 +115,11 @@ export function Search(props: Props) {
         ))}
       </Panel>
       <Panel>
-        {searches.map((q) => (
+        {searches.map((searchTerm) => (
           <ListItem
-            key={q}
-            primaryText={q}
-            onClick={() => {
-              setQuery(q);
-              search(q, true);
-            }}
+            key={searchTerm}
+            primaryText={searchTerm}
+            onClick={() => search(searchTerm)}
           />
         ))}
         {searches.length === 0 ? (

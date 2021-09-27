@@ -19,6 +19,16 @@ import { ThemeProvider, useTheme } from './contexts/ThemeProvider';
 import { AppBar } from './ui-components/AppBar';
 import { AppBarProvider } from './contexts/AppBarProvider';
 import { Trending } from './routes/Trending';
+import { QueryClient, QueryClientProvider } from 'react-query';
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      staleTime: 3600000,
+    },
+  },
+});
 
 export function AppWrapper() {
   return (
@@ -27,7 +37,9 @@ export function AppWrapper() {
         <ThemeProvider>
           <AppBarProvider>
             <PlayerProvider>
-              <App />
+              <QueryClientProvider client={queryClient}>
+                <App />
+              </QueryClientProvider>
             </PlayerProvider>
           </AppBarProvider>
         </ThemeProvider>
@@ -121,7 +133,7 @@ export default function App() {
         <Router>
           <AnimatedRoute path="/home/:panelId" component={Home} />
           <AnimatedRoute path="/collection/:panelId" component={Collection} />
-          <AnimatedRoute path="/trending/:categoryId" component={Trending} />
+          <AnimatedRoute path="/trending" component={Trending} />
           <AnimatedRoute
             path="/podcast/preview/:podexId/:panelId"
             component={PodcastPreview}

@@ -81,10 +81,10 @@ export default function Home(props: Props) {
         history.push(`/collection/${screen}`);
         break;
       case 'trending':
-        history.push(`/trending/all`);
+        history.push(`/trending`);
         break;
       case 'search':
-        history.push(`/search/search`);
+        history.push(`/search/results`);
         break;
       case 'settings':
       case 'theme':
