@@ -32,11 +32,8 @@
 
 .tabs > div {
   font-size: 40px;
-  padding-right: 12px;
-  color: var(--secondary-text-color);
-}
-.tabs > div:first-of-type {
   padding-left: 12px;
+  color: var(--secondary-text-color);
 }
 .tabs > div.active {
   color: var(--primary-text-color);

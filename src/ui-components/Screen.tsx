@@ -119,33 +119,37 @@ export function Screen({
   function handleScroll(ev: any) {
     const panels = ev.target as HTMLDivElement;
 
-    const panelsDiff = panels.scrollWidth - panels.clientWidth;
-    const progress = (panels.scrollLeft / panelsDiff) * 100;
-    props.onScroll?.(progress);
+    const progress =
+      (panels.scrollLeft / panels.scrollWidth - panels.clientWidth) * 100;
 
     if (dynamicTheme) {
       setBackgroundScroll(progress);
     }
 
     const heroText = heroTextRef?.current as unknown as HTMLDivElement;
-    if (heroText && panels && heroText.scrollWidth > heroText.clientWidth) {
+    if (heroText && heroText.scrollWidth > heroText.clientWidth) {
       const headerDiff = heroText.scrollWidth - heroText.clientWidth;
       const newLeft = (progress / 100) * headerDiff;
       heroText.style.transform = `translateX(-${newLeft}px)`;
     }
 
-    // TODO: Temporary. Need more WP accurate scrolling tabs
     const tabs = tabsRef?.current as unknown as HTMLDivElement;
-    if (tabs && panels) {
-      // const panelSizePct = 100 / (panels.children.length - 1);
-      // const panelIndex = Array.from(panels.children).findIndex(
-      //   (panel, i) => progress < (i + 1) * panelSizePct - 0.0001
-      // );
-      const diff = tabs.scrollWidth - tabs.clientWidth;
-      const newLeft = (progress / 100) * diff;
-      tabs.style.transform = `translateX(-${newLeft}px)`;
+    if (tabs && props.panels.length > 0) {
+      const currentPanelIndex = Math.floor(
+        panels.scrollLeft / panels.clientWidth
+      );
+      const panelProgress =
+        ((panels.scrollLeft - panels.clientWidth * currentPanelIndex) /
+          panels.clientWidth) *
+        100;
+      const currentTab = tabs.children[currentPanelIndex] as HTMLDivElement;
+
+      const offset =
+        currentTab.offsetLeft + (currentTab.clientWidth * panelProgress) / 100;
+      tabs.style.transform = `translateX(-${offset}px)`;
     }
 
+    props.onScroll?.(progress);
     scrollingDone(ev);
   }
   return (
@@ -163,6 +167,7 @@ export function Screen({
               <div
                 key={tab.id}
                 className={ifClass(tab.id === props.activePanel, styles.active)}
+                data-tab-id={tab.id}
               >
                 {tab.label}
               </div>
