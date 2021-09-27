@@ -1,0 +1,12 @@
+.root {
+  color: var(--accent-text-color);
+}
+
+.inline {
+  display: inline;
+}
+
+.block {
+  display: block;
+  margin: 6px 0;
+}
