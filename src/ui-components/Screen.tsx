@@ -120,7 +120,7 @@ export function Screen({
     const panels = ev.target as HTMLDivElement;
 
     const progress =
-      (panels.scrollLeft / panels.scrollWidth - panels.clientWidth) * 100;
+      (panels.scrollLeft / (panels.scrollWidth - panels.clientWidth)) * 100;
 
     if (dynamicTheme) {
       setBackgroundScroll(progress);
