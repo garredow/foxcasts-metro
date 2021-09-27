@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useHistory, useLocation } from 'react-router';
 import { useAppBar } from '../contexts/AppBarProvider';
 import { useSettings } from '../contexts/SettingsProvider';
@@ -35,6 +35,8 @@ export function Screen({
   showTabs = true,
   ...props
 }: Props) {
+  const [touching, setTouching] = useState(false);
+  const [activeTab, setActiveTab] = useState<string>();
   const rootRef = useRef(null);
   const heroTextRef = useRef(null);
   const tabsRef = useRef(null);
@@ -42,7 +44,6 @@ export function Screen({
 
   const history = useHistory();
   const location = useLocation();
-  // console.log('loc', location);
 
   const { settings } = useSettings();
   const {
@@ -60,6 +61,7 @@ export function Screen({
   }, [disableAppBar, setCommands]);
 
   useEffect(() => {
+    setActiveTab(props.activePanel);
     const panels = panelsRef.current as unknown as HTMLDivElement;
     let panelIndex = Array.from(panels.children).findIndex(
       (a: any) => a.dataset.panelId === props.activePanel
@@ -147,6 +149,32 @@ export function Screen({
       const offset =
         currentTab.offsetLeft + (currentTab.clientWidth * panelProgress) / 100;
       tabs.style.transform = `translateX(-${offset}px)`;
+
+      if (touching) {
+        return;
+      }
+
+      const fromPanel: any = Array.from(panels.children).find(
+        (a: any) => a.dataset.panelId === props.activePanel
+      );
+      const forward = fromPanel.getBoundingClientRect().left <= 0;
+      if (forward && panelProgress >= 50) {
+        setActiveTab(
+          (tabs.children[currentPanelIndex + 1] as HTMLDivElement).dataset.tabId
+        );
+      } else if (forward && panelProgress < 50) {
+        setActiveTab(
+          (tabs.children[currentPanelIndex] as HTMLDivElement).dataset.tabId
+        );
+      } else if (!forward && panelProgress >= 50) {
+        setActiveTab(
+          (tabs.children[currentPanelIndex + 1] as HTMLDivElement).dataset.tabId
+        );
+      } else {
+        setActiveTab(
+          (tabs.children[currentPanelIndex] as HTMLDivElement).dataset.tabId
+        );
+      }
     }
 
     props.onScroll?.(progress);
@@ -166,7 +194,7 @@ export function Screen({
             {props.panels.map((tab) => (
               <div
                 key={tab.id}
-                className={ifClass(tab.id === props.activePanel, styles.active)}
+                className={ifClass(tab.id === activeTab, styles.active)}
                 data-tab-id={tab.id}
               >
                 {tab.label}
@@ -181,6 +209,8 @@ export function Screen({
             ifClass(!panelPeek, styles.fullWidth)
           )}
           onScroll={handleScroll}
+          onTouchStart={() => setTouching(true)}
+          onTouchEnd={() => setTouching(false)}
         >
           {props.children}
         </div>
