@@ -9,11 +9,11 @@ import { Screen } from '../ui-components/Screen';
 import { Typography } from '../ui-components/Typography';
 import styles from './Home.module.css';
 import { useEffect, useState } from 'react';
-import { Icon } from '../ui-components/Icon';
 import { Core } from '../services/core';
 import { useTheme } from '../contexts/ThemeProvider';
 import { useSettings } from '../contexts/SettingsProvider';
 import { LinkButton } from '../ui-components/LinkButton';
+import { IconButton } from '../ui-components/IconButton';
 
 type Params = {
   panelId: string;
@@ -125,13 +125,13 @@ export default function Home(props: Props) {
             <div>-{formatTime(status.duration - status.currentTime || 0)}</div>
           </div>
           <div className={styles.playbackControls}>
-            <Icon icon="rewind" onClick={() => player.jump(-30)} />
+            <IconButton icon="rewind" onClick={() => player.jump(-30)} />
             {status.playing ? (
-              <Icon icon="pause" onClick={() => player.pause()} />
+              <IconButton icon="pause" onClick={() => player.pause()} />
             ) : (
-              <Icon icon="play" onClick={() => player.play()} />
+              <IconButton icon="play" onClick={() => player.play()} />
             )}
-            <Icon icon="ff" onClick={() => player.jump(30)} />
+            <IconButton icon="ff" onClick={() => player.jump(30)} />
           </div>
           <LinkButton disabled={false} onClick={() => handleNavigate('player')}>
             Open full player

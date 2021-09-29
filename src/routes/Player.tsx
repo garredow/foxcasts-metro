@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import { PlaybackStatus, usePlayer } from '../contexts/PlayerProvider';
 import { ComponentBaseProps } from '../models';
 import { Core } from '../services/core';
-import { Icon } from '../ui-components/Icon';
+import { IconButton } from '../ui-components/IconButton';
 import { ListItem } from '../ui-components/ListItem';
 import { Loading } from '../ui-components/Loading';
 import { Panel } from '../ui-components/Panel';
@@ -96,21 +96,29 @@ export function Player(props: Props) {
               </div>
             </div>
             <div className={styles.controls}>
-              <Icon
+              <IconButton
                 icon="rewind"
                 size="large"
                 onClick={() => player.jump(-30)}
               />
               {status.playing ? (
-                <Icon
+                <IconButton
                   icon="pause"
                   size="large"
                   onClick={() => player.pause()}
                 />
               ) : (
-                <Icon icon="play" size="large" onClick={() => player.play()} />
+                <IconButton
+                  icon="play"
+                  size="large"
+                  onClick={() => player.play()}
+                />
               )}
-              <Icon icon="ff" size="large" onClick={() => player.jump(30)} />
+              <IconButton
+                icon="ff"
+                size="large"
+                onClick={() => player.jump(30)}
+              />
             </div>
           </>
         ) : (

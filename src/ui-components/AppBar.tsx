@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { ComponentBaseProps } from '../models';
 import { joinClasses } from '../utils/classes';
-import { Icon } from './Icon';
 import styles from './AppBar.module.css';
 import { ListItem } from './ListItem';
 import { useAppBar } from '../contexts/AppBarProvider';
+import { IconButton } from './IconButton';
 
 export type TopItem = {
   id: string;
@@ -52,7 +52,7 @@ export function AppBar(props: Props) {
           <div className={styles.placeholder}></div>
           <div className={styles.flex}></div>
           {commands?.top.map((a) => (
-            <Icon
+            <IconButton
               key={a.id}
               className={styles.button}
               icon={a.icon}
@@ -61,8 +61,9 @@ export function AppBar(props: Props) {
             />
           ))}
           <div className={styles.flex}></div>
-          <Icon
+          <IconButton
             icon="overflow-dots"
+            interactive={false}
             onClick={(ev: any) => {
               ev.stopPropagation();
               setIsOpen(!isOpen);
