@@ -15,7 +15,6 @@ type Props = ComponentBaseProps & {
   color?: 'primary' | 'secondary' | 'accent';
   decoration?: 'none' | 'underline';
   transform?: 'none' | 'uppercase' | 'lowercase';
-  onClick?: () => void;
 };
 
 export function Typography({
@@ -35,7 +34,6 @@ export function Typography({
         styles[transform],
         props.className
       )}
-      onClick={props.onClick}
     >
       {props.children}
     </div>

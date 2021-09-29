@@ -1,0 +1,10 @@
+.root {
+  color: var(--accent-text-color);
+  padding: 6px 0;
+  text-decoration: underline;
+}
+
+.root.disabled {
+  color: var(--secondary-text-color);
+  text-decoration: none;
+}

@@ -13,6 +13,7 @@ import { Icon } from '../ui-components/Icon';
 import { Core } from '../services/core';
 import { useTheme } from '../contexts/ThemeProvider';
 import { useSettings } from '../contexts/SettingsProvider';
+import { LinkButton } from '../ui-components/LinkButton';
 
 type Params = {
   panelId: string;
@@ -132,13 +133,9 @@ export default function Home(props: Props) {
             )}
             <Icon icon="ff" onClick={() => player.jump(30)} />
           </div>
-          <Typography
-            color="accent"
-            decoration="underline"
-            onClick={() => handleNavigate('player')}
-          >
+          <LinkButton disabled={false} onClick={() => handleNavigate('player')}>
             Open full player
-          </Typography>
+          </LinkButton>
         </Panel>
       ) : null}
       <Panel headerText="collection" panelId={panels[1].id}>
