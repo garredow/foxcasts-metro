@@ -10,15 +10,17 @@ type Option = {
 };
 
 type Props = ComponentBaseProps & {
+  type?: 'inline' | 'fullscreen';
   label?: string;
   fullWidth?: boolean;
   disabled?: boolean;
   options: Option[];
   value: string;
-  onChange?: (key: string) => void;
+  onChange: (key: string) => void;
 };
 
 export function Select({
+  type = 'inline',
   fullWidth = true,
   disabled = false,
   ...props
@@ -33,51 +35,95 @@ export function Select({
   }
 
   return (
-    <div
-      className={joinClasses(styles.root, ifClass(fullWidth, styles.fullWidth))}
-    >
-      {props.label ? <div className={styles.label}>{props.label}</div> : null}
+    <>
       <div
-        className={joinClasses(styles.container, ifClass(open, styles.open))}
-        style={{
-          maxHeight: open
-            ? `${(props.options.length - 1) * 48 + 66}px`
-            : '40px',
-        }}
-        onClick={() => setOpen(true)}
+        className={joinClasses(
+          styles.root,
+          ifClass(fullWidth, styles.fullWidth)
+        )}
       >
+        {props.label ? <div className={styles.label}>{props.label}</div> : null}
         <div
-          className={styles.options}
-          style={{ transform: `translateY(-${getOffset()}px)` }}
+          className={joinClasses(styles.container, ifClass(open, styles.open))}
+          style={{
+            maxHeight:
+              open && type === 'inline'
+                ? `${(props.options.length - 1) * 48 + 66}px`
+                : '40px',
+          }}
+          onClick={() => setOpen(true)}
         >
-          {props.options.map((opt) => (
-            <div
-              key={opt.key}
-              className={joinClasses(
-                styles.option,
-                ifClass(opt.key === props.value, styles.selected)
-              )}
-              onClick={(ev) => {
-                if (open) {
-                  ev.stopPropagation();
-                  props.onChange?.(opt.key);
-                  setOpen(false);
-                } else {
-                  setOpen(true);
-                }
-              }}
-            >
-              {opt.isColor ? (
-                <div
-                  className={styles.colorBox}
-                  style={{ backgroundColor: `#${opt.key}` }}
-                ></div>
-              ) : null}
-              {opt.label}
-            </div>
-          ))}
+          <div
+            className={joinClasses(
+              styles.options,
+              ifClass(type === 'fullscreen', styles.noAnimate)
+            )}
+            style={{ transform: `translateY(-${getOffset()}px)` }}
+          >
+            {props.options.map((opt) => (
+              <div
+                key={opt.key}
+                className={joinClasses(
+                  styles.option,
+                  ifClass(opt.key === props.value, styles.selected)
+                )}
+                onClick={(ev) => {
+                  if (open) {
+                    ev.stopPropagation();
+                    props.onChange?.(opt.key);
+                    setOpen(false);
+                  } else {
+                    setOpen(true);
+                  }
+                }}
+              >
+                {opt.isColor ? (
+                  <div
+                    className={styles.colorBox}
+                    style={{ backgroundColor: `#${opt.key}` }}
+                  ></div>
+                ) : null}
+                {opt.label}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
-    </div>
+      {type === 'fullscreen' && (
+        <div
+          className={joinClasses(styles.fullPicker, ifClass(open, styles.open))}
+        >
+          <div className={styles.title}>Accent Color</div>
+          <div className={styles.options}>
+            {props.options.map((opt) => (
+              <div
+                key={opt.key}
+                className={joinClasses(
+                  styles.option,
+                  ifClass(opt.key === props.value, styles.selected)
+                )}
+                onClick={(ev) => {
+                  if (open) {
+                    ev.stopPropagation();
+                    props.onChange?.(opt.key);
+                    setOpen(false);
+                  } else {
+                    setOpen(true);
+                  }
+                }}
+              >
+                {opt.isColor ? (
+                  <div
+                    className={styles.colorBox}
+                    style={{ backgroundColor: `#${opt.key}` }}
+                  ></div>
+                ) : null}
+                {opt.label}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </>
   );
 }

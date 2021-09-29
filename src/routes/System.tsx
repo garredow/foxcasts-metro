@@ -87,10 +87,30 @@ export function System(props: Props) {
           label="Accent Color"
           control={
             <Select
+              type="fullscreen"
               value={settings.accentColor}
               options={[
-                { key: '1ba1e2', label: 'Cyan', isColor: true },
-                { key: 'ec5817', label: 'Orange', isColor: true },
+                { key: 'ec5817', label: 'Foxcasts Orange', isColor: true },
+                { key: 'A4C400', label: 'Lime', isColor: true },
+                { key: '60A917', label: 'Green', isColor: true },
+                { key: '008A00', label: 'Emerald', isColor: true },
+                { key: '00ABA9', label: 'Teal', isColor: true },
+                { key: '1BA1E2', label: 'Cyan', isColor: true },
+                { key: '0050EF', label: 'Cobalt', isColor: true },
+                { key: '6A00FF', label: 'Indigo', isColor: true },
+                { key: 'AA00FF', label: 'Violet', isColor: true },
+                { key: 'F472D0', label: 'Pink', isColor: true },
+                { key: 'D80073', label: 'Magenta', isColor: true },
+                { key: 'A20025', label: 'Crimson', isColor: true },
+                { key: 'E51400', label: 'Red', isColor: true },
+                { key: 'FA6800', label: 'Orange', isColor: true },
+                { key: 'F0A30A', label: 'Amber', isColor: true },
+                { key: 'E3C800', label: 'Yellow', isColor: true },
+                { key: '825A2C', label: 'Brown', isColor: true },
+                { key: '6D8764', label: 'Olive', isColor: true },
+                { key: '647687', label: 'Steel', isColor: true },
+                { key: '76608A', label: 'Mauve', isColor: true },
+                { key: '87794E', label: 'Taupe', isColor: true },
               ]}
               onChange={(val) => saveSetting('accentColor', val)}
             />

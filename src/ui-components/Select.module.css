@@ -35,12 +35,15 @@
   transform: translateY(0px) !important;
 }
 
-.options {
+.container .options {
   transition: transform 300ms;
   transform: translateY(-157px);
 }
+.container .options.noAnimate {
+  transition: none;
+}
 
-.option {
+.container .option {
   padding: 12px 0;
   font-size: 18px;
   font-weight: 400;
@@ -55,4 +58,44 @@
   height: 18px;
   width: 18px;
   margin-right: 6px;
+}
+
+/* Full Picker */
+
+.fullPicker {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: var(--app-bg-color);
+  z-index: 9;
+}
+.fullPicker.open {
+  display: flex;
+  flex-direction: column;
+}
+
+.fullPicker .title {
+  padding: 12px 12px 12px 12px;
+  font-size: 16px;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.fullPicker .options {
+  overflow-y: auto;
+}
+
+.fullPicker .option {
+  font-size: 20px;
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  padding: 12px;
+}
+
+.fullPicker .option.selected {
+  color: var(--accent-text-color);
 }
