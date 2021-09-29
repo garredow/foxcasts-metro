@@ -3,6 +3,7 @@ import { joinClasses } from '../utils/classes';
 import styles from './Typography.module.css';
 
 type Props = ComponentBaseProps & {
+  display?: 'block' | 'inline';
   type?:
     | 'caption'
     | 'body'
@@ -18,6 +19,7 @@ type Props = ComponentBaseProps & {
 };
 
 export function Typography({
+  display = 'block',
   type = 'body',
   color = 'primary',
   decoration = 'none',
@@ -28,6 +30,7 @@ export function Typography({
     <div
       className={joinClasses(
         styles.root,
+        styles[display],
         styles[type],
         styles[color],
         styles[decoration],

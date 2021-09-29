@@ -65,8 +65,10 @@ export function System(props: Props) {
       <Panel paddingRight={true} panelId={panels[1].id}>
         <Typography type="bodyLarge">
           Change your phone's background and{' '}
-          <span className={styles.accentText}>accent color</span> to match your
-          mood today, this week, or all month.
+          <Typography display="inline" type="bodyLarge" color="accent">
+            accent color
+          </Typography>{' '}
+          to match your mood today, this week, or all month.
         </Typography>
         <SettingsRow
           label="Background"

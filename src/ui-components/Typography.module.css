@@ -2,6 +2,15 @@
   padding: 6px 0;
 }
 
+.block {
+  display: block;
+}
+
+.inline {
+  display: inline;
+  padding: 0;
+}
+
 .caption {
   font-size: 12px;
   font-weight: 400;
