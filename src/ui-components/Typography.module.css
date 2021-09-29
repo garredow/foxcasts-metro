@@ -44,3 +44,14 @@
 .accent {
   color: var(--accent-text-color);
 }
+
+.underline {
+  text-decoration: underline;
+}
+
+.lowercase {
+  text-transform: lowercase;
+}
+.uppercase {
+  text-transform: uppercase;
+}

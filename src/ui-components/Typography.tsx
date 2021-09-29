@@ -13,11 +13,16 @@ type Props = ComponentBaseProps & {
     | 'titleLarge'
     | 'display';
   color?: 'primary' | 'secondary' | 'accent';
+  decoration?: 'none' | 'underline';
+  transform?: 'none' | 'uppercase' | 'lowercase';
+  onClick?: () => void;
 };
 
 export function Typography({
   type = 'body',
   color = 'primary',
+  decoration = 'none',
+  transform = 'none',
   ...props
 }: Props) {
   return (
@@ -26,8 +31,11 @@ export function Typography({
         styles.root,
         styles[type],
         styles[color],
+        styles[decoration],
+        styles[transform],
         props.className
       )}
+      onClick={props.onClick}
     >
       {props.children}
     </div>

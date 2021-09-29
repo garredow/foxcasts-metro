@@ -75,9 +75,10 @@ export default function Home(props: Props) {
         history.push(`/player/status`);
         break;
       case 'podcasts':
-      case 'episodes':
-      case 'playlists':
       case 'categories':
+      case 'recent':
+      case 'inProgress':
+      case 'favorites':
         history.push(`/collection/${screen}`);
         break;
       case 'trending':
@@ -131,6 +132,13 @@ export default function Home(props: Props) {
             )}
             <Icon icon="ff" onClick={() => player.jump(30)} />
           </div>
+          <Typography
+            color="accent"
+            decoration="underline"
+            onClick={() => handleNavigate('player')}
+          >
+            Open full player
+          </Typography>
         </Panel>
       ) : null}
       <Panel headerText="collection" panelId={panels[1].id}>
@@ -139,20 +147,20 @@ export default function Home(props: Props) {
           onClick={() => handleNavigate('podcasts')}
         />
         <ListItem
-          primaryText="episodes"
-          onClick={() => handleNavigate('episodes')}
-        />
-        <ListItem
-          primaryText="playlists"
-          onClick={() => handleNavigate('playlists')}
-        />
-        <ListItem
           primaryText="categories"
           onClick={() => handleNavigate('categories')}
         />
         <ListItem
-          primaryText="player"
-          onClick={() => handleNavigate('player')}
+          primaryText="most recent"
+          onClick={() => handleNavigate('recent')}
+        />
+        <ListItem
+          primaryText="in progress"
+          onClick={() => handleNavigate('inProgress')}
+        />
+        <ListItem
+          primaryText="favorites"
+          onClick={() => handleNavigate('favorites')}
         />
       </Panel>
       <Panel headerText="get podcasts" panelId={panels[2].id}>

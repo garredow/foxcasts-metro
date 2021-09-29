@@ -1,4 +1,5 @@
-import { Podcast } from 'foxcasts-core/lib/types';
+import { EpisodeExtended, Podcast } from 'foxcasts-core/lib/types';
+import { formatTime } from 'foxcasts-core/lib/utils';
 import { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router';
 import { useSettings } from '../contexts/SettingsProvider';
@@ -474,14 +475,18 @@ const categories = [
 
 const panels = [
   { id: 'podcasts', label: 'podcasts' },
-  { id: 'episodes', label: 'episodes' },
-  { id: 'playlists', label: 'playlists' },
   { id: 'categories', label: 'categories' },
+  { id: 'recent', label: 'most recent' },
+  { id: 'inProgress', label: 'in progress' },
+  { id: 'favorites', label: 'favorites' },
 ];
 
 export function Collection(props: Props) {
   const [seeding, setSeeding] = useState(false);
   const [podcasts, setPodcasts] = useState<Podcast[] | null>(null);
+  const [recent, setRecent] = useState<EpisodeExtended[] | null>(null);
+  const [inProgress, setInProgress] = useState<EpisodeExtended[] | null>(null);
+  const [favorites, setFavorites] = useState<EpisodeExtended[] | null>(null);
   const { panelId } = useParams<Params>();
   const history = useHistory();
   const { settings } = useSettings();
@@ -489,6 +494,12 @@ export function Collection(props: Props) {
   useEffect(() => {
     if (panelId === 'podcasts' && podcasts === null) {
       Core.getPodcasts().then(setPodcasts);
+    } else if (panelId === 'recent' && recent === null) {
+      Core.getEpisodesByFilter('recent').then(setRecent);
+    } else if (panelId === 'inProgress' && inProgress === null) {
+      Core.getEpisodesByFilter('inProgress').then(setInProgress);
+    } else if (panelId === 'favorites' && favorites === null) {
+      setFavorites([]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [panelId]);
@@ -573,26 +584,49 @@ export function Collection(props: Props) {
         {renderPodcasts()}
       </Panel>
       <Panel panelId={panels[1].id}>
-        <ListItem primaryText="episodes" />
-      </Panel>
-      <Panel panelId={panels[2].id}>
-        <ListItem
-          primaryText="most recent"
-          onClick={() => navTo('/playlist/recent')}
-        />
-        <ListItem
-          primaryText="in progress"
-          onClick={() => navTo('/playlist/inProgress')}
-        />
-        <ListItem
-          primaryText="favorites"
-          onClick={() => navTo('/playlist/favorites')}
-        />
-      </Panel>
-      <Panel panelId={panels[3].id}>
         {categories.map((category) => (
           <ListItem key={category.id} primaryText={category.name} />
         ))}
+      </Panel>
+      <Panel panelId={panels[2].id}>
+        {recent === null && <Loading />}
+        {recent?.map((episode) => (
+          <ListItem
+            key={episode.id}
+            primaryText={episode.title}
+            secondaryText={episode.podcastTitle}
+            accentText={new Date(episode.date).toLocaleDateString()}
+            onClick={() => navTo(`/episode/${episode.id}/info`)}
+          />
+        ))}
+        {recent?.length === 0 ? <p>No episodes</p> : null}
+      </Panel>
+      <Panel panelId={panels[3].id}>
+        {inProgress === null && <Loading />}
+        {inProgress?.map((episode) => (
+          <ListItem
+            key={episode.id}
+            primaryText={episode.title}
+            secondaryText={episode.podcastTitle}
+            accentText={`${formatTime(episode.progress)} of ${formatTime(
+              episode.duration
+            )} played`}
+            onClick={() => navTo(`/episode/${episode.id}/info`)}
+          />
+        ))}
+        {inProgress?.length === 0 ? <p>No episodes</p> : null}
+      </Panel>
+      <Panel panelId={panels[4].id}>
+        {favorites === null && <Loading />}
+        {favorites?.map((episode) => (
+          <ListItem
+            key={episode.id}
+            primaryText={episode.title}
+            secondaryText={episode.podcastTitle}
+            onClick={() => navTo(`/episode/${episode.id}/info`)}
+          />
+        ))}
+        {favorites?.length === 0 ? <p>No episodes</p> : null}
       </Panel>
     </Screen>
   );
